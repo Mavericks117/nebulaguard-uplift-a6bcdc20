@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
-import WebSocketIndicator from "@/components/WebSocketIndicator";
+import ThemeToggle from "@/components/ThemeToggle";
 import { clearAuth, getAuthUser } from "@/utils/auth";
 import { useNavigate } from "react-router-dom";
 
@@ -30,7 +30,7 @@ const Header = () => {
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
             <Input
-              placeholder="Search hosts, problems, insights..."
+              placeholder="Search hosts, alerts, insights..."
               className="pl-10 bg-surface/50 border-border/50 focus:border-primary transition-all w-full"
             />
           </div>
@@ -38,7 +38,7 @@ const Header = () => {
 
         {/* Actions */}
         <div className="flex items-center gap-4 ml-6">
-          <WebSocketIndicator />
+          <ThemeToggle />
           
           {/* Notifications */}
           <Button variant="ghost" size="icon" className="relative hover:bg-surface">
