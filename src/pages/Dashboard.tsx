@@ -1,6 +1,10 @@
 import { Server, AlertTriangle, CheckCircle, Activity, TrendingUp, TrendingDown } from "lucide-react";
 import KPICard from "@/components/dashboard/KPICard";
 import AppLayout from "@/components/layout/AppLayout";
+import SeverityDistributionChart from "@/components/dashboard/SeverityDistributionChart";
+import AlertsByHostWidget from "@/components/dashboard/AlertsByHostWidget";
+import AlertTimelineWidget from "@/components/dashboard/AlertTimelineWidget";
+import CriticalIssuesPanel from "@/components/dashboard/CriticalIssuesPanel";
 
 const Dashboard = () => {
   return (
@@ -46,6 +50,17 @@ const Dashboard = () => {
             icon={Activity}
             color="secondary"
           />
+        </div>
+
+        {/* Alert Widgets Row */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <SeverityDistributionChart />
+          <AlertsByHostWidget />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <AlertTimelineWidget />
+          <CriticalIssuesPanel />
         </div>
 
         {/* Charts Row */}

@@ -9,10 +9,11 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Clock, CheckCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import { Clock, CheckCircle, ChevronLeft, ChevronRight, Search } from "lucide-react";
 import SeverityBadge, { AlertSeverity } from "./SeverityBadge";
 import AlertActionMenu from "./AlertActionMenu";
 import AlertDetailDrawer from "./AlertDetailDrawer";
+import TableSkeleton from "@/components/loading/TableSkeleton";
 
 interface Alert {
   id: number;
@@ -81,9 +82,10 @@ const mockAlerts: Alert[] = [
 
 interface AlertsTableProps {
   alerts?: Alert[];
+  loading?: boolean;
 }
 
-const AlertsTable = ({ alerts = mockAlerts }: AlertsTableProps) => {
+const AlertsTable = ({ alerts = mockAlerts, loading = false }: AlertsTableProps) => {
   const [selectedAlert, setSelectedAlert] = useState<Alert | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -99,14 +101,19 @@ const AlertsTable = ({ alerts = mockAlerts }: AlertsTableProps) => {
     setDrawerOpen(true);
   };
 
+  if (loading) {
+    return <TableSkeleton rows={5} columns={7} />;
+  }
+
   if (alerts.length === 0) {
     return (
       <div className="cyber-card flex flex-col items-center justify-center py-16">
-        <CheckCircle className="w-16 h-16 text-success mb-4" />
-        <h3 className="text-xl font-semibold mb-2">No Active Alerts</h3>
-        <p className="text-muted-foreground">
-          All systems are running smoothly
+        <Search className="w-16 h-16 text-muted-foreground mb-4" />
+        <h3 className="text-xl font-semibold mb-2">No Alerts Found</h3>
+        <p className="text-muted-foreground mb-4">
+          No alerts match your current filter criteria
         </p>
+        <Button variant="outline">Clear Filters</Button>
       </div>
     );
   }
