@@ -1,6 +1,12 @@
-import { AlertTriangle, X, CheckCircle, Clock } from "lucide-react";
+import { useState } from "react";
+import { AlertTriangle, X, CheckCircle } from "lucide-react";
 import AppLayout from "@/components/layout/AppLayout";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
+import AlertsTable from "@/components/alerts/AlertsTable";
+import AlertFilters from "@/components/alerts/AlertFilters";
+import { AlertSeverity } from "@/components/alerts/SeverityBadge";
 
 const mockProblems = [
   {
@@ -45,7 +51,16 @@ const mockProblems = [
   },
 ];
 
-const Problems = () => {
+const Alerts = () => {
+  const [selectedSeverities, setSelectedSeverities] = useState<AlertSeverity[]>([
+    "critical",
+    "high",
+    "warning",
+    "info",
+  ]);
+  const [showAcknowledged, setShowAcknowledged] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+
   const getSeverityColor = (severity: string) => {
     switch (severity) {
       case "critical": return { bg: "bg-destructive/20", text: "text-destructive", border: "border-destructive/30" };
@@ -69,17 +84,31 @@ const Problems = () => {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-4xl font-bold mb-2">Problems</h1>
-            <p className="text-muted-foreground">{mockProblems.length} active issues</p>
+            <h1 className="text-4xl font-bold mb-2">Alerts</h1>
+            <p className="text-muted-foreground">{mockProblems.length} active alerts</p>
           </div>
-          <div className="flex gap-3">
-            <Button variant="outline">
-              Filter
-            </Button>
-            <Button className="bg-gradient-to-r from-success to-primary hover:opacity-90 text-background">
-              Acknowledge All
-            </Button>
+          <Button className="bg-gradient-to-r from-success to-primary hover:opacity-90 text-background">
+            Acknowledge All
+          </Button>
+        </div>
+
+        {/* Search and Filters */}
+        <div className="flex gap-3">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+            <Input
+              placeholder="Search alerts..."
+              className="pl-10"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
           </div>
+          <AlertFilters
+            selectedSeverities={selectedSeverities}
+            onSeverityChange={setSelectedSeverities}
+            showAcknowledged={showAcknowledged}
+            onShowAcknowledgedChange={setShowAcknowledged}
+          />
         </div>
 
         {/* Stats Cards */}
@@ -133,62 +162,11 @@ const Problems = () => {
           </div>
         </div>
 
-        {/* Problems List */}
-        <div className="space-y-3">
-          {mockProblems.map((problem, index) => {
-            const colors = getSeverityColor(problem.severity);
-            return (
-              <div
-                key={problem.id}
-                className={`cyber-card border ${colors.border} ${problem.acknowledged ? 'opacity-60' : ''}`}
-                style={{ animationDelay: `${index * 0.05}s` }}
-              >
-                <div className="flex items-start gap-4">
-                  {/* Severity Icon */}
-                  <div className={`w-12 h-12 rounded-xl ${colors.bg} flex items-center justify-center flex-shrink-0 ${colors.text}`}>
-                    {getSeverityIcon(problem.severity)}
-                  </div>
-
-                  {/* Problem Details */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-3 mb-2">
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${colors.bg} ${colors.text}`}>
-                        {problem.severity.toUpperCase()}
-                      </span>
-                      <span className="font-bold">{problem.host}</span>
-                      <span className="flex items-center gap-1 text-sm text-muted-foreground">
-                        <Clock className="w-3 h-3" />
-                        {problem.duration}
-                      </span>
-                      {problem.acknowledged && (
-                        <span className="flex items-center gap-1 text-xs text-success">
-                          <CheckCircle className="w-3 h-3" />
-                          Acknowledged
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-muted-foreground">{problem.issue}</p>
-                  </div>
-
-                  {/* Actions */}
-                  <div className="flex gap-2 flex-shrink-0">
-                    {!problem.acknowledged && (
-                      <Button size="sm" variant="outline" className="hover:border-success hover:text-success">
-                        Acknowledge
-                      </Button>
-                    )}
-                    <Button size="sm" variant="outline">
-                      Details
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        {/* Alerts Table */}
+        <AlertsTable />
       </div>
     </AppLayout>
   );
 };
 
-export default Problems;
+export default Alerts;

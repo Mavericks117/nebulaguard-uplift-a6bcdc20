@@ -14,12 +14,12 @@ import {
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/" },
   { icon: Server, label: "Hosts", path: "/hosts" },
-  { icon: AlertTriangle, label: "Problems", path: "/problems" },
+  { icon: AlertTriangle, label: "Alerts", path: "/alerts" },
   { icon: Radio, label: "Traps", path: "/traps" },
   { icon: Lightbulb, label: "Insights", path: "/insights" },
   { icon: FileText, label: "Reports", path: "/reports" },
-    { icon: Settings, label: "Settings", path: "/settings" },
-    { icon: Shield, label: "Admin Panel", path: "/admin/org" },
+  { icon: Settings, label: "Settings", path: "/settings" },
+  { icon: Shield, label: "Admin Panel", path: "/admin/org" },
 ];
 
 const Sidebar = () => {
