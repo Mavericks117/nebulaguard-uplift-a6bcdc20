@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { motion } from "framer-motion";
 import {
   Table,
   TableBody,
@@ -89,6 +90,7 @@ const AlertsTable = ({ alerts = mockAlerts, loading = false }: AlertsTableProps)
   const [selectedAlert, setSelectedAlert] = useState<Alert | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [focusedRowIndex, setFocusedRowIndex] = useState<number | null>(null);
   const itemsPerPage = 10;
 
   const totalPages = Math.ceil(alerts.length / itemsPerPage);
@@ -96,10 +98,35 @@ const AlertsTable = ({ alerts = mockAlerts, loading = false }: AlertsTableProps)
   const endIndex = startIndex + itemsPerPage;
   const currentAlerts = alerts.slice(startIndex, endIndex);
 
-  const handleRowClick = (alert: Alert) => {
+  const handleRowClick = useCallback((alert: Alert) => {
     setSelectedAlert(alert);
     setDrawerOpen(true);
-  };
+  }, []);
+
+  const handleKeyDown = useCallback((e: React.KeyboardEvent, alert: Alert, index: number) => {
+    switch (e.key) {
+      case "Enter":
+      case " ":
+        e.preventDefault();
+        handleRowClick(alert);
+        break;
+      case "ArrowDown":
+        e.preventDefault();
+        const nextIndex = Math.min(index + 1, currentAlerts.length - 1);
+        setFocusedRowIndex(nextIndex);
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        const prevIndex = Math.max(index - 1, 0);
+        setFocusedRowIndex(prevIndex);
+        break;
+      case "Escape":
+        if (drawerOpen) {
+          setDrawerOpen(false);
+        }
+        break;
+    }
+  }, [currentAlerts.length, handleRowClick, drawerOpen]);
 
   if (loading) {
     return <TableSkeleton rows={5} columns={7} />;
@@ -107,14 +134,19 @@ const AlertsTable = ({ alerts = mockAlerts, loading = false }: AlertsTableProps)
 
   if (alerts.length === 0) {
     return (
-      <div className="cyber-card flex flex-col items-center justify-center py-16">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className="cyber-card flex flex-col items-center justify-center py-16"
+      >
         <Search className="w-16 h-16 text-muted-foreground mb-4" />
         <h3 className="text-xl font-semibold mb-2">No Alerts Found</h3>
         <p className="text-muted-foreground mb-4">
           No alerts match your current filter criteria
         </p>
         <Button variant="outline">Clear Filters</Button>
-      </div>
+      </motion.div>
     );
   }
 
@@ -122,45 +154,53 @@ const AlertsTable = ({ alerts = mockAlerts, loading = false }: AlertsTableProps)
     <>
       <div className="cyber-card overflow-hidden">
         <div className="overflow-x-auto">
-          <Table>
+          <Table role="table" aria-label="Alerts table">
             <TableHeader>
               <TableRow>
-                <TableHead>Severity</TableHead>
-                <TableHead>Host</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Problem</TableHead>
-                <TableHead>Duration</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead role="columnheader" aria-sort="none">Severity</TableHead>
+                <TableHead role="columnheader">Host</TableHead>
+                <TableHead role="columnheader">Category</TableHead>
+                <TableHead role="columnheader">Problem</TableHead>
+                <TableHead role="columnheader">Duration</TableHead>
+                <TableHead role="columnheader">Status</TableHead>
+                <TableHead className="text-right" role="columnheader">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {currentAlerts.map((alert) => (
-                <TableRow
+              {currentAlerts.map((alert, index) => (
+                <motion.tr
                   key={alert.id}
-                  className="cursor-pointer hover:bg-muted/50"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.2, delay: index * 0.05 }}
+                  whileHover={{ scale: 1.01 }}
+                  className="cursor-pointer hover:bg-muted/50 transition-colors"
                   onClick={() => handleRowClick(alert)}
+                  onKeyDown={(e) => handleKeyDown(e, alert, index)}
+                  tabIndex={0}
+                  role="row"
+                  aria-label={`Alert ${alert.severity} on ${alert.host}: ${alert.problem}`}
                 >
-                  <TableCell>
+                  <TableCell role="cell">
                     <SeverityBadge severity={alert.severity} />
                   </TableCell>
-                  <TableCell>
+                  <TableCell role="cell">
                     <Badge variant="outline">{alert.host}</Badge>
                   </TableCell>
-                  <TableCell>
+                  <TableCell role="cell">
                     <Badge variant="secondary">{alert.category}</Badge>
                   </TableCell>
-                  <TableCell className="font-medium">{alert.problem}</TableCell>
-                  <TableCell>
+                  <TableCell className="font-medium" role="cell">{alert.problem}</TableCell>
+                  <TableCell role="cell">
                     <span className="flex items-center gap-1 text-sm text-muted-foreground">
-                      <Clock className="w-3 h-3" />
+                      <Clock className="w-3 h-3" aria-hidden="true" />
                       {alert.duration}
                     </span>
                   </TableCell>
-                  <TableCell>
+                  <TableCell role="cell">
                     {alert.acknowledged ? (
                       <span className="flex items-center gap-1 text-xs text-success">
-                        <CheckCircle className="w-3 h-3" />
+                        <CheckCircle className="w-3 h-3" aria-hidden="true" />
                         Acknowledged
                       </span>
                     ) : (
@@ -169,14 +209,14 @@ const AlertsTable = ({ alerts = mockAlerts, loading = false }: AlertsTableProps)
                       </span>
                     )}
                   </TableCell>
-                  <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
+                  <TableCell className="text-right" onClick={(e) => e.stopPropagation()} role="cell">
                     <AlertActionMenu
                       alertId={alert.id}
                       acknowledged={alert.acknowledged}
                       onViewDetails={() => handleRowClick(alert)}
                     />
                   </TableCell>
-                </TableRow>
+                </motion.tr>
               ))}
             </TableBody>
           </Table>
@@ -184,7 +224,7 @@ const AlertsTable = ({ alerts = mockAlerts, loading = false }: AlertsTableProps)
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-between px-6 py-4 border-t border-border">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 py-4 border-t border-border">
             <p className="text-sm text-muted-foreground">
               Showing {startIndex + 1} to {Math.min(endIndex, alerts.length)} of{" "}
               {alerts.length} alerts
@@ -195,10 +235,11 @@ const AlertsTable = ({ alerts = mockAlerts, loading = false }: AlertsTableProps)
                 size="sm"
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
+                aria-label="Previous page"
               >
                 <ChevronLeft className="w-4 h-4" />
               </Button>
-              <span className="text-sm">
+              <span className="text-sm" aria-live="polite" aria-atomic="true">
                 Page {currentPage} of {totalPages}
               </span>
               <Button
@@ -206,6 +247,7 @@ const AlertsTable = ({ alerts = mockAlerts, loading = false }: AlertsTableProps)
                 size="sm"
                 onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}
+                aria-label="Next page"
               >
                 <ChevronRight className="w-4 h-4" />
               </Button>

@@ -5,6 +5,7 @@ import SeverityDistributionChart from "@/components/dashboard/SeverityDistributi
 import AlertsByHostWidget from "@/components/dashboard/AlertsByHostWidget";
 import AlertTimelineWidget from "@/components/dashboard/AlertTimelineWidget";
 import CriticalIssuesPanel from "@/components/dashboard/CriticalIssuesPanel";
+import ErrorBoundary from "@/components/errors/ErrorBoundary";
 
 const Dashboard = () => {
   return (
@@ -54,13 +55,21 @@ const Dashboard = () => {
 
         {/* Alert Widgets Row */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <SeverityDistributionChart />
-          <AlertsByHostWidget />
+          <ErrorBoundary fallbackMessage="Failed to load severity distribution chart">
+            <SeverityDistributionChart />
+          </ErrorBoundary>
+          <ErrorBoundary fallbackMessage="Failed to load alerts by host widget">
+            <AlertsByHostWidget />
+          </ErrorBoundary>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <AlertTimelineWidget />
-          <CriticalIssuesPanel />
+          <ErrorBoundary fallbackMessage="Failed to load alert timeline">
+            <AlertTimelineWidget />
+          </ErrorBoundary>
+          <ErrorBoundary fallbackMessage="Failed to load critical issues panel">
+            <CriticalIssuesPanel />
+          </ErrorBoundary>
         </div>
 
         {/* Charts Row */}
