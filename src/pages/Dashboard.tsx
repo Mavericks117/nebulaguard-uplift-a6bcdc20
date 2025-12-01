@@ -10,15 +10,15 @@ import ErrorBoundary from "@/components/errors/ErrorBoundary";
 const Dashboard = () => {
   return (
     <AppLayout>
-      <div className="space-y-6 animate-fade-in">
+      <div className="space-y-4 sm:space-y-6 animate-fade-in px-2 sm:px-0">
         {/* Header */}
-        <div>
-          <h1 className="text-4xl font-bold mb-2">Dashboard</h1>
-          <p className="text-muted-foreground">Real-time monitoring intelligence powered by AI</p>
+        <div className="mb-4 sm:mb-6">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2">Dashboard</h1>
+          <p className="text-sm sm:text-base text-muted-foreground">Real-time monitoring intelligence powered by AI</p>
         </div>
 
         {/* KPI Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
           <KPICard
             title="Total Hosts"
             value="142"
@@ -54,7 +54,7 @@ const Dashboard = () => {
         </div>
 
         {/* Alert Widgets Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 lg:gap-6">
           <ErrorBoundary fallbackMessage="Failed to load severity distribution chart">
             <SeverityDistributionChart />
           </ErrorBoundary>
@@ -63,7 +63,7 @@ const Dashboard = () => {
           </ErrorBoundary>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 lg:gap-6">
           <ErrorBoundary fallbackMessage="Failed to load alert timeline">
             <AlertTimelineWidget />
           </ErrorBoundary>
@@ -73,7 +73,7 @@ const Dashboard = () => {
         </div>
 
         {/* Charts Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 lg:gap-6">
           {/* System Health Overview */}
           <div className="cyber-card">
             <div className="flex items-center justify-between mb-6">

@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 import { X, AlertTriangle, AlertCircle, Info } from "lucide-react";
 
 export type AlertSeverity = "critical" | "high" | "warning" | "info";
@@ -8,47 +9,52 @@ interface SeverityBadgeProps {
   className?: string;
 }
 
-const SeverityBadge = ({ severity, className = "" }: SeverityBadgeProps) => {
-  const config = {
-    critical: {
-      label: "CRITICAL",
-      bg: "bg-destructive/20",
-      text: "text-destructive",
-      border: "border-destructive/30",
-      icon: X,
-    },
-    high: {
-      label: "HIGH",
-      bg: "bg-accent/20",
-      text: "text-accent",
-      border: "border-accent/30",
-      icon: AlertTriangle,
-    },
-    warning: {
-      label: "WARNING",
-      bg: "bg-warning/20",
-      text: "text-warning",
-      border: "border-warning/30",
-      icon: AlertCircle,
-    },
-    info: {
-      label: "INFO",
-      bg: "bg-primary/20",
-      text: "text-primary",
-      border: "border-primary/30",
-      icon: Info,
-    },
-  };
+interface SeverityConfig {
+  label: string;
+  className: string;
+  icon: React.ElementType;
+}
 
-  const { label, bg, text, border, icon: Icon } = config[severity];
+const severityConfig: Record<AlertSeverity, SeverityConfig> = {
+  critical: {
+    label: "CRITICAL",
+    className: "bg-destructive text-background border-destructive font-bold",
+    icon: X,
+  },
+  high: {
+    label: "HIGH",
+    className: "bg-accent text-background border-accent font-bold",
+    icon: AlertTriangle,
+  },
+  warning: {
+    label: "WARNING",
+    className: "bg-warning text-background border-warning font-bold",
+    icon: AlertCircle,
+  },
+  info: {
+    label: "INFO",
+    className: "bg-primary text-background border-primary font-bold",
+    icon: Info,
+  },
+};
+
+const SeverityBadge = ({ severity, className = "" }: SeverityBadgeProps) => {
+  const config = severityConfig[severity];
+  const Icon = config.icon;
 
   return (
     <Badge
       variant="outline"
-      className={`${bg} ${text} ${border} gap-1.5 ${className}`}
+      className={cn(
+        "flex items-center gap-1 border-2 text-xs",
+        config.className,
+        className
+      )}
+      aria-label={`Severity: ${config.label}`}
     >
-      <Icon className="w-3 h-3" />
-      {label}
+      <Icon className="w-3 h-3" aria-hidden="true" />
+      <span className="hidden sm:inline">{config.label}</span>
+      <span className="sm:hidden">{config.label.slice(0, 4)}</span>
     </Badge>
   );
 };
