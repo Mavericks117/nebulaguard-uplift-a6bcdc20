@@ -153,17 +153,17 @@ const AlertsTable = ({ alerts = mockAlerts, loading = false }: AlertsTableProps)
   return (
     <>
       <div className="cyber-card overflow-hidden">
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto -mx-2 sm:mx-0">
           <Table role="table" aria-label="Alerts table">
             <TableHeader>
               <TableRow>
-                <TableHead role="columnheader" aria-sort="none">Severity</TableHead>
-                <TableHead role="columnheader">Host</TableHead>
-                <TableHead role="columnheader">Category</TableHead>
-                <TableHead role="columnheader">Problem</TableHead>
-                <TableHead role="columnheader">Duration</TableHead>
-                <TableHead role="columnheader">Status</TableHead>
-                <TableHead className="text-right" role="columnheader">Actions</TableHead>
+                <TableHead role="columnheader" aria-sort="none" className="w-24">Severity</TableHead>
+                <TableHead role="columnheader" className="w-32 sm:w-auto">Host</TableHead>
+                <TableHead role="columnheader" className="hidden sm:table-cell">Category</TableHead>
+                <TableHead role="columnheader" className="min-w-[200px]">Problem</TableHead>
+                <TableHead role="columnheader" className="hidden md:table-cell">Duration</TableHead>
+                <TableHead role="columnheader" className="hidden lg:table-cell">Status</TableHead>
+                <TableHead className="text-right w-20" role="columnheader">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -181,27 +181,29 @@ const AlertsTable = ({ alerts = mockAlerts, loading = false }: AlertsTableProps)
                   role="row"
                   aria-label={`Alert ${alert.severity} on ${alert.host}: ${alert.problem}`}
                 >
-                  <TableCell role="cell">
+                  <TableCell role="cell" className="whitespace-nowrap">
                     <SeverityBadge severity={alert.severity} />
                   </TableCell>
-                  <TableCell role="cell">
-                    <Badge variant="outline">{alert.host}</Badge>
+                  <TableCell role="cell" className="whitespace-nowrap">
+                    <Badge variant="outline" className="text-xs">{alert.host}</Badge>
                   </TableCell>
-                  <TableCell role="cell">
-                    <Badge variant="secondary">{alert.category}</Badge>
+                  <TableCell role="cell" className="hidden sm:table-cell whitespace-nowrap">
+                    <Badge variant="secondary" className="text-xs">{alert.category}</Badge>
                   </TableCell>
-                  <TableCell className="font-medium" role="cell">{alert.problem}</TableCell>
-                  <TableCell role="cell">
+                  <TableCell className="font-medium min-w-[200px] sm:min-w-[250px]" role="cell">
+                    <span className="line-clamp-2">{alert.problem}</span>
+                  </TableCell>
+                  <TableCell role="cell" className="hidden md:table-cell whitespace-nowrap">
                     <span className="flex items-center gap-1 text-sm text-muted-foreground">
                       <Clock className="w-3 h-3" aria-hidden="true" />
                       {alert.duration}
                     </span>
                   </TableCell>
-                  <TableCell role="cell">
+                  <TableCell role="cell" className="hidden lg:table-cell whitespace-nowrap">
                     {alert.acknowledged ? (
                       <span className="flex items-center gap-1 text-xs text-success">
                         <CheckCircle className="w-3 h-3" aria-hidden="true" />
-                        Acknowledged
+                        <span className="hidden xl:inline">Acknowledged</span>
                       </span>
                     ) : (
                       <span className="text-xs text-muted-foreground">
@@ -209,7 +211,7 @@ const AlertsTable = ({ alerts = mockAlerts, loading = false }: AlertsTableProps)
                       </span>
                     )}
                   </TableCell>
-                  <TableCell className="text-right" onClick={(e) => e.stopPropagation()} role="cell">
+                  <TableCell className="text-right whitespace-nowrap" onClick={(e) => e.stopPropagation()} role="cell">
                     <AlertActionMenu
                       alertId={alert.id}
                       acknowledged={alert.acknowledged}

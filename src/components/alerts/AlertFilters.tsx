@@ -93,11 +93,15 @@ const AlertFilters = ({
   );
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-2 w-full sm:w-auto">
       {/* Severity Filter */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="gap-2">
+          <Button 
+            variant="outline" 
+            className="gap-2 flex-1 sm:flex-none text-sm"
+            aria-label="Filter by severity"
+          >
             <Filter className="w-4 h-4" />
             Severity
             {selectedSeverities.length < 4 && (
@@ -125,7 +129,11 @@ const AlertFilters = ({
       {/* Host Filter */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="gap-2">
+          <Button 
+            variant="outline" 
+            className="gap-2 flex-1 sm:flex-none text-sm"
+            aria-label="Filter by host"
+          >
             Hosts
             {selectedHosts.length > 0 && (
               <Badge variant="secondary" className="ml-1">
@@ -152,7 +160,11 @@ const AlertFilters = ({
       {/* Tags Filter */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="gap-2">
+          <Button 
+            variant="outline" 
+            className="gap-2 flex-1 sm:flex-none text-sm"
+            aria-label="Filter by tags, classes, or scopes"
+          >
             Tags
             {selectedTags.length > 0 && (
               <Badge variant="secondary" className="ml-1">
@@ -179,7 +191,11 @@ const AlertFilters = ({
       {/* Time Range Filter */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="gap-2">
+          <Button 
+            variant="outline" 
+            className="gap-2 flex-1 sm:flex-none text-sm"
+            aria-label="Filter by time range"
+          >
             <CalendarIcon className="w-4 h-4" />
             {timeRanges.find((r) => r.value === selectedTimeRange)?.label || "Time Range"}
           </Button>
@@ -238,7 +254,11 @@ const AlertFilters = ({
       {/* Status Filter */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline">
+          <Button 
+            variant="outline" 
+            className="flex-1 sm:flex-none text-sm"
+            aria-label="Filter by alert status"
+          >
             Status
           </Button>
         </DropdownMenuTrigger>
@@ -256,9 +276,15 @@ const AlertFilters = ({
 
       {/* Clear All Filters */}
       {activeFiltersCount > 0 && (
-        <Button variant="ghost" onClick={clearAllFilters} className="gap-2">
+        <Button 
+          variant="ghost" 
+          onClick={clearAllFilters} 
+          className="gap-2 w-full sm:w-auto text-sm"
+          aria-label={`Clear all ${activeFiltersCount} active filters`}
+        >
           <X className="w-4 h-4" />
-          Clear All ({activeFiltersCount})
+          <span className="hidden sm:inline">Clear All ({activeFiltersCount})</span>
+          <span className="sm:hidden">Clear ({activeFiltersCount})</span>
         </Button>
       )}
 
