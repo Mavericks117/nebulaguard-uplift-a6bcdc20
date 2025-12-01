@@ -22,7 +22,7 @@ const TableSkeleton = ({ rows = 5, columns = 7 }: TableSkeletonProps) => {
             <TableRow>
               {Array.from({ length: columns }).map((_, i) => (
                 <TableHead key={i}>
-                  <Skeleton className="h-4 w-20" />
+                  <Skeleton className="h-4 w-20 animate-pulse" />
                 </TableHead>
               ))}
             </TableRow>
@@ -32,7 +32,10 @@ const TableSkeleton = ({ rows = 5, columns = 7 }: TableSkeletonProps) => {
               <TableRow key={rowIndex}>
                 {Array.from({ length: columns }).map((_, colIndex) => (
                   <TableCell key={colIndex}>
-                    <Skeleton className="h-4 w-full" />
+                    <Skeleton 
+                      className="h-4 w-full animate-pulse rounded-md" 
+                      style={{ animationDelay: `${(rowIndex + colIndex) * 50}ms` }}
+                    />
                   </TableCell>
                 ))}
               </TableRow>

@@ -10,7 +10,9 @@ const data = [
   { host: "worker-queue-02", alerts: 3 },
 ];
 
-const AlertsByHostWidget = () => {
+import { memo } from "react";
+
+const AlertsByHostWidget = memo(() => {
   return (
     <div className="cyber-card">
       <div className="flex items-center justify-between mb-6">
@@ -60,6 +62,8 @@ const AlertsByHostWidget = () => {
       </div>
     </div>
   );
-};
+});
+
+AlertsByHostWidget.displayName = "AlertsByHostWidget";
 
 export default AlertsByHostWidget;

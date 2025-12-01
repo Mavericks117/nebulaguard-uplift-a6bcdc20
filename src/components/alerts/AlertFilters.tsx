@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -49,31 +49,31 @@ const AlertFilters = ({
   const [customDateFrom, setCustomDateFrom] = useState<Date>();
   const [customDateTo, setCustomDateTo] = useState<Date>();
 
-  const toggleSeverity = (severity: AlertSeverity) => {
+  const toggleSeverity = useCallback((severity: AlertSeverity) => {
     if (selectedSeverities.includes(severity)) {
       onSeverityChange(selectedSeverities.filter((s) => s !== severity));
     } else {
       onSeverityChange([...selectedSeverities, severity]);
     }
-  };
+  }, [selectedSeverities, onSeverityChange]);
 
-  const toggleHost = (host: string) => {
+  const toggleHost = useCallback((host: string) => {
     if (selectedHosts.includes(host)) {
       setSelectedHosts(selectedHosts.filter((h) => h !== host));
     } else {
       setSelectedHosts([...selectedHosts, host]);
     }
-  };
+  }, [selectedHosts]);
 
-  const toggleTag = (tag: string) => {
+  const toggleTag = useCallback((tag: string) => {
     if (selectedTags.includes(tag)) {
       setSelectedTags(selectedTags.filter((t) => t !== tag));
     } else {
       setSelectedTags([...selectedTags, tag]);
     }
-  };
+  }, [selectedTags]);
 
-  const clearAllFilters = () => {
+  const clearAllFilters = useCallback(() => {
     onSeverityChange(["critical", "high", "warning", "info"]);
     onShowAcknowledgedChange(true);
     setSelectedHosts([]);
@@ -81,14 +81,16 @@ const AlertFilters = ({
     setSelectedTimeRange("24h");
     setCustomDateFrom(undefined);
     setCustomDateTo(undefined);
-  };
+  }, [onSeverityChange, onShowAcknowledgedChange]);
 
-  const activeFiltersCount = 
+  const activeFiltersCount = useMemo(() => 
     (selectedSeverities.length < 4 ? 1 : 0) +
     (!showAcknowledged ? 1 : 0) +
     (selectedHosts.length > 0 ? 1 : 0) +
     (selectedTags.length > 0 ? 1 : 0) +
-    (selectedTimeRange !== "24h" || customDateFrom || customDateTo ? 1 : 0);
+    (selectedTimeRange !== "24h" || customDateFrom || customDateTo ? 1 : 0),
+    [selectedSeverities.length, showAcknowledged, selectedHosts.length, selectedTags.length, selectedTimeRange, customDateFrom, customDateTo]
+  );
 
   return (
     <div className="flex flex-wrap gap-2">

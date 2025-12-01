@@ -35,7 +35,9 @@ const mockIssues: CriticalIssue[] = [
   },
 ];
 
-const CriticalIssuesPanel = () => {
+import { memo } from "react";
+
+const CriticalIssuesPanel = memo(() => {
   if (mockIssues.length === 0) {
     return (
       <div className="cyber-card">
@@ -100,6 +102,8 @@ const CriticalIssuesPanel = () => {
       </Button>
     </div>
   );
-};
+});
+
+CriticalIssuesPanel.displayName = "CriticalIssuesPanel";
 
 export default CriticalIssuesPanel;

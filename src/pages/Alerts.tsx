@@ -7,6 +7,8 @@ import { Search } from "lucide-react";
 import AlertsTable from "@/components/alerts/AlertsTable";
 import AlertFilters from "@/components/alerts/AlertFilters";
 import { AlertSeverity } from "@/components/alerts/SeverityBadge";
+import ErrorBoundary from "@/components/errors/ErrorBoundary";
+import { useDebounce } from "@/hooks/useDebounce";
 
 const mockProblems = [
   {
@@ -60,6 +62,7 @@ const Alerts = () => {
   ]);
   const [showAcknowledged, setShowAcknowledged] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearch = useDebounce(searchQuery, 300);
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
@@ -163,7 +166,9 @@ const Alerts = () => {
         </div>
 
         {/* Alerts Table */}
-        <AlertsTable />
+        <ErrorBoundary fallbackMessage="Failed to load alerts table">
+          <AlertsTable />
+        </ErrorBoundary>
       </div>
     </AppLayout>
   );

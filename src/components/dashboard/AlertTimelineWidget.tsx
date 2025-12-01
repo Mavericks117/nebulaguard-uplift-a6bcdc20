@@ -11,7 +11,9 @@ const data = [
   { time: "20:00", alerts: 5 },
 ];
 
-const AlertTimelineWidget = () => {
+import { memo } from "react";
+
+const AlertTimelineWidget = memo(() => {
   const total = data.reduce((sum, item) => sum + item.alerts, 0);
   const avg = (total / data.length).toFixed(1);
 
@@ -69,6 +71,8 @@ const AlertTimelineWidget = () => {
       </ResponsiveContainer>
     </div>
   );
-};
+});
+
+AlertTimelineWidget.displayName = "AlertTimelineWidget";
 
 export default AlertTimelineWidget;

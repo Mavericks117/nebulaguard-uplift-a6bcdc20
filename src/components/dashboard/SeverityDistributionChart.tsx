@@ -8,7 +8,9 @@ const data = [
   { name: "INFO", value: 5, color: "hsl(var(--primary))" },
 ];
 
-const SeverityDistributionChart = () => {
+import { memo } from "react";
+
+const SeverityDistributionChart = memo(() => {
   return (
     <div className="cyber-card">
       <div className="flex items-center justify-between mb-6">
@@ -56,6 +58,8 @@ const SeverityDistributionChart = () => {
       </div>
     </div>
   );
-};
+});
+
+SeverityDistributionChart.displayName = "SeverityDistributionChart";
 
 export default SeverityDistributionChart;
