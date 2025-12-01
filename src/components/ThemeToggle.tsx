@@ -19,71 +19,30 @@ const ThemeToggle = () => {
     const root = document.documentElement;
 
     if (newTheme === "light") {
-      // // Light theme CSS variables
-      // root.style.setProperty("--background", "0 0% 100%");
-      // root.style.setProperty("--foreground", "240 10% 3.9%");
-      // root.style.setProperty("--card", "0 0% 100%");
-      // root.style.setProperty("--card-foreground", "240 10% 3.9%");
-      // root.style.setProperty("--popover", "0 0% 100%");
-      // root.style.setProperty("--popover-foreground", "240 10% 3.9%");
-      // root.style.setProperty("--primary", "185 100% 40%");
-      // root.style.setProperty("--primary-foreground", "0 0% 100%");
-      // root.style.setProperty("--secondary", "240 4.8% 95.9%");
-      // root.style.setProperty("--secondary-foreground", "240 5.9% 10%");
-      // root.style.setProperty("--muted", "240 4.8% 95.9%");
-      // root.style.setProperty("--muted-foreground", "240 3.8% 46.1%");
-      // root.style.setProperty("--accent", "340 100% 50%");
-      // root.style.setProperty("--accent-foreground", "0 0% 100%");
-      // root.style.setProperty("--destructive", "0 84.2% 60.2%");
-      // root.style.setProperty("--destructive-foreground", "0 0% 100%");
-      // root.style.setProperty("--border", "240 5.9% 90%");
-      // root.style.setProperty("--input", "240 5.9% 90%");
-      // root.style.setProperty("--ring", "185 100% 40%");
-      // root.style.setProperty("--surface", "240 4.8% 97%");
-      // root.style.setProperty("--success", "142 76% 36%");
-      // root.style.setProperty("--warning", "38 92% 50%");
-      // root.style.setProperty("--sidebar", "0 0% 98%");
-      // root.style.setProperty("--sidebar-foreground", "240 5.3% 26.1%");
-      // root.style.setProperty("--sidebar-border", "220 13% 91%");
-      // root.style.setProperty("--sidebar-accent", "220 14.3% 95.9%");
-      
-      // Light theme CSS variables (softer white)
-      root.style.setProperty("--background", "0 0% 94%");
+      // Light theme CSS variables
+      root.style.setProperty("--background", "0 0% 100%");
       root.style.setProperty("--foreground", "240 10% 3.9%");
-
-      root.style.setProperty("--card", "0 0% 94%");
+      root.style.setProperty("--card", "0 0% 100%");
       root.style.setProperty("--card-foreground", "240 10% 3.9%");
-
-      root.style.setProperty("--popover", "0 0% 98%");
+      root.style.setProperty("--popover", "0 0% 100%");
       root.style.setProperty("--popover-foreground", "240 10% 3.9%");
-
       root.style.setProperty("--primary", "185 100% 40%");
       root.style.setProperty("--primary-foreground", "0 0% 100%");
-
-      root.style.setProperty("--secondary", "240 5% 94%");
+      root.style.setProperty("--secondary", "240 4.8% 95.9%");
       root.style.setProperty("--secondary-foreground", "240 5.9% 10%");
-
-      root.style.setProperty("--muted", "240 5% 94%");
+      root.style.setProperty("--muted", "240 4.8% 95.9%");
       root.style.setProperty("--muted-foreground", "240 3.8% 46.1%");
-
       root.style.setProperty("--accent", "340 100% 50%");
       root.style.setProperty("--accent-foreground", "0 0% 100%");
-
       root.style.setProperty("--destructive", "0 84.2% 60.2%");
       root.style.setProperty("--destructive-foreground", "0 0% 100%");
-
       root.style.setProperty("--border", "240 5.9% 90%");
       root.style.setProperty("--input", "240 5.9% 90%");
       root.style.setProperty("--ring", "185 100% 40%");
-
-      // Slightly softened surface
-      root.style.setProperty("--surface", "0 0% 94%");
-
+      root.style.setProperty("--surface", "240 4.8% 97%");
       root.style.setProperty("--success", "142 76% 36%");
       root.style.setProperty("--warning", "38 92% 50%");
-
-      // Sidebar softened slightly as well
-      root.style.setProperty("--sidebar", "0 0% 94%");
+      root.style.setProperty("--sidebar", "0 0% 98%");
       root.style.setProperty("--sidebar-foreground", "240 5.3% 26.1%");
       root.style.setProperty("--sidebar-border", "220 13% 91%");
       root.style.setProperty("--sidebar-accent", "220 14.3% 95.9%");
