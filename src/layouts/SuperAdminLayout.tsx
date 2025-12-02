@@ -1,10 +1,10 @@
-import { ReactNode } from "react";
+import { ReactNode, useState, useEffect } from "react";
 import { Bell, Search, User, LayoutDashboard, Building2, BarChart4, Shield, CreditCard, Database, Cpu, ToggleLeft, Store, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { NavLink } from "@/components/NavLink";
 import ThemeToggle from "@/components/ThemeToggle";
-import { getAuthUser } from "@/utils/auth";
+import { getAuthUser, AuthUser } from "@/utils/auth";
 
 interface SuperAdminLayoutProps {
   children: ReactNode;
@@ -23,7 +23,11 @@ const menuItems = [
 ];
 
 const SuperAdminLayout = ({ children }: SuperAdminLayoutProps) => {
-  const user = getAuthUser();
+  const [user, setUser] = useState<AuthUser | null>(null);
+
+  useEffect(() => {
+    getAuthUser().then(setUser);
+  }, []);
   
   return (
     <div className="min-h-screen w-full bg-background">

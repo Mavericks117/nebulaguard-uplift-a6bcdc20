@@ -1,3 +1,5 @@
+import { supabase } from "@/integrations/supabase/client";
+
 export type UserRole = 'user' | 'org_admin' | 'super_admin';
 
 export interface AuthUser {
@@ -7,57 +9,82 @@ export interface AuthUser {
   organizationId?: string;
 }
 
-export const getAuthUser = (): AuthUser | null => {
-  const authData = localStorage.getItem("nebula_auth");
-  const roleData = localStorage.getItem("nebula_role");
-  const userEmail = localStorage.getItem("nebula_email");
-  const userId = localStorage.getItem("nebula_user_id");
+export const getAuthUser = async (): Promise<AuthUser | null> => {
+  const { data: { session } } = await supabase.auth.getSession();
   
-  if (authData === "true" && roleData && userEmail && userId) {
-    return {
-      id: userId,
-      email: userEmail,
-      role: roleData as UserRole,
-      organizationId: localStorage.getItem("nebula_org_id") || undefined
-    };
+  if (!session?.user) {
+    return null;
   }
-  
-  return null;
+
+  // Fetch user role from database
+  const { data: roleData } = await supabase
+    .from('user_roles')
+    .select('role')
+    .eq('user_id', session.user.id)
+    .order('role', { ascending: true }) // super_admin < org_admin < user alphabetically
+    .limit(1)
+    .maybeSingle();
+
+  // Fetch profile data
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('organization_id')
+    .eq('id', session.user.id)
+    .maybeSingle();
+
+  return {
+    id: session.user.id,
+    email: session.user.email!,
+    role: (roleData?.role as UserRole) || 'user',
+    organizationId: profile?.organization_id || undefined
+  };
 };
 
-export const setAuthUser = (user: AuthUser) => {
-  localStorage.setItem("nebula_auth", "true");
-  localStorage.setItem("nebula_role", user.role);
-  localStorage.setItem("nebula_email", user.email);
-  localStorage.setItem("nebula_user_id", user.id);
-  if (user.organizationId) {
-    localStorage.setItem("nebula_org_id", user.organizationId);
-  }
+export const signUp = async (email: string, password: string, fullName?: string) => {
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        full_name: fullName || email
+      }
+    }
+  });
+
+  return { data, error };
 };
 
-export const mockLogin = (email: string, password: string, role: UserRole): AuthUser | null => {
-  // Mock login - in production, this would validate against backend
-  if (email && password) {
-    const user: AuthUser = {
-      id: `user_${Date.now()}`,
-      email,
-      role,
-      organizationId: role !== 'user' ? `org_${Date.now()}` : undefined
-    };
-    setAuthUser(user);
-    return user;
-  }
-  return null;
+export const signIn = async (email: string, password: string) => {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  return { data, error };
 };
 
-export const clearAuth = () => {
-  localStorage.removeItem("nebula_auth");
-  localStorage.removeItem("nebula_role");
-  localStorage.removeItem("nebula_email");
-  localStorage.removeItem("nebula_user_id");
-  localStorage.removeItem("nebula_org_id");
+export const signOut = async () => {
+  const { error } = await supabase.auth.signOut();
+  return { error };
 };
 
-export const isAuthenticated = (): boolean => {
-  return localStorage.getItem("nebula_auth") === "true";
+export const resetPasswordForEmail = async (email: string) => {
+  const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${window.location.origin}/reset-password`
+  });
+
+  return { data, error };
+};
+
+export const updatePassword = async (newPassword: string) => {
+  const { data, error } = await supabase.auth.updateUser({
+    password: newPassword
+  });
+
+  return { data, error };
+};
+
+export const isAuthenticated = async (): Promise<boolean> => {
+  const { data: { session } } = await supabase.auth.getSession();
+  return !!session;
 };

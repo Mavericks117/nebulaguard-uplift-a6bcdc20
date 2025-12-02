@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Bell, Search, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,15 +11,19 @@ import {
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 import ThemeToggle from "@/components/ThemeToggle";
-import { clearAuth, getAuthUser } from "@/utils/auth";
+import { signOut, getAuthUser, AuthUser } from "@/utils/auth";
 import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const navigate = useNavigate();
-  const user = getAuthUser();
+  const [user, setUser] = useState<AuthUser | null>(null);
 
-  const handleLogout = () => {
-    clearAuth();
+  useEffect(() => {
+    getAuthUser().then(setUser);
+  }, []);
+
+  const handleLogout = async () => {
+    await signOut();
     navigate("/login");
   };
 
