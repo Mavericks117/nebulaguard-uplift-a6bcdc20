@@ -1,5 +1,6 @@
 import { getAuthUser } from '@/utils/auth';
 import { hasPermission } from '@/utils/rbac';
+import { useEffect, useState } from 'react';
 
 interface PermissionGateProps {
   children: React.ReactNode;
@@ -8,9 +9,23 @@ interface PermissionGateProps {
 }
 
 const PermissionGate = ({ children, permission, fallback = null }: PermissionGateProps) => {
-  const user = getAuthUser();
+  const [hasAccess, setHasAccess] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getAuthUser().then((user) => {
+      if (user && hasPermission(user.role, permission)) {
+        setHasAccess(true);
+      }
+      setLoading(false);
+    });
+  }, [permission]);
+
+  if (loading) {
+    return null;
+  }
   
-  if (!user || !hasPermission(user.role, permission)) {
+  if (!hasAccess) {
     return <>{fallback}</>;
   }
   

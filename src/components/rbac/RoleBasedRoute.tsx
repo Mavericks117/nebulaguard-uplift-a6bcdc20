@@ -1,6 +1,7 @@
 import { Navigate } from 'react-router-dom';
 import { getAuthUser, UserRole } from '@/utils/auth';
 import { hasRole } from '@/utils/rbac';
+import { useEffect, useState } from 'react';
 
 interface RoleBasedRouteProps {
   children: React.ReactNode;
@@ -13,7 +14,19 @@ const RoleBasedRoute = ({
   requiredRole, 
   redirectTo = '/login' 
 }: RoleBasedRouteProps) => {
-  const user = getAuthUser();
+  const [user, setUser] = useState<{ id: string; email: string; role: UserRole; organizationId?: string } | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getAuthUser().then((authUser) => {
+      setUser(authUser);
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
   
   if (!user) {
     return <Navigate to={redirectTo} replace />;
