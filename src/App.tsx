@@ -46,6 +46,7 @@ import DisasterRecovery from "./pages/super-admin/DisasterRecovery";
 import AIMLPerformance from "./pages/super-admin/AIMLPerformance";
 import FeatureFlagsPage from "./pages/super-admin/FeatureFlagsPage";
 import ResellerPortal from "./pages/super-admin/ResellerPortal";
+import Wireframe from "./pages/Wireframe";
 
 const queryClient = new QueryClient();
 
@@ -63,6 +64,7 @@ const App = () => (
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/2fa/setup" element={<TwoFASetup />} />
           <Route path="/2fa/verify" element={<TwoFAVerify />} />
+          <Route path="/wireframe" element={<Wireframe />} />
           
           {/* User Routes */}
           <Route path="/dashboard" element={<RoleBasedRoute requiredRole="user"><UserDashboard /></RoleBasedRoute>} />
