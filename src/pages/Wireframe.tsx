@@ -1,7 +1,7 @@
-import { InteractiveWireframe } from '@/components/wireframe/InteractiveWireframe';
+import { WireframeContainer } from '@/wireframe/WireframeContainer';
 
 const Wireframe = () => {
-  return <InteractiveWireframe />;
+  return <WireframeContainer />;
 };
 
 export default Wireframe;
