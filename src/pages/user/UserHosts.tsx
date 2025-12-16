@@ -4,27 +4,29 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Search, Server, AlertCircle, CheckCircle } from "lucide-react";
+import { Search, Server, AlertCircle, CheckCircle, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useHosts } from "@/hooks/useHosts";
 
 const UserHosts = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
   
-  const hosts = [
-    { id: "1", name: "web-server-01", ip: "192.168.1.10", status: "online", problems: 0, group: "Web Servers" },
-    { id: "2", name: "db-server-01", ip: "192.168.1.20", status: "online", problems: 2, group: "Databases" },
-    { id: "3", name: "app-server-01", ip: "192.168.1.30", status: "warning", problems: 1, group: "Web Servers" },
-    { id: "4", name: "cache-server-01", ip: "192.168.1.40", status: "online", problems: 0, group: "Cache" },
-    { id: "5", name: "api-gateway-01", ip: "192.168.1.50", status: "online", problems: 0, group: "API Gateway" },
-    { id: "6", name: "lb-nginx-01", ip: "192.168.1.60", status: "online", problems: 1, group: "Load Balancers" },
-    { id: "7", name: "worker-queue-01", ip: "192.168.1.70", status: "online", problems: 0, group: "Workers" },
-  ];
+  const { hosts, isLoading, error } = useHosts();
 
-  const groups = Array.from(new Set(hosts.map(h => h.group)));
+  const mappedHosts = hosts.map((host) => ({
+    id: host.hostid,
+    name: host.name || host.host,
+    ip: host.ip || "—",
+    status: "online",
+    problems: 0,
+    group: host.hostgroups,
+  }));
+
+  const groups = Array.from(new Set(mappedHosts.map(h => h.group)));
   
-  const filteredHosts = hosts.filter(host => {
+  const filteredHosts = mappedHosts.filter(host => {
     const matchesSearch = host.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
                          host.ip.includes(searchQuery);
     const matchesGroup = !selectedGroup || host.group === selectedGroup;
@@ -60,7 +62,7 @@ const UserHosts = () => {
           </div>
 
           {/* Filter Tabs */}
-          <div className="flex gap-2 mb-6">
+          <div className="flex gap-2 mb-6 flex-wrap">
             <Button
               variant={selectedGroup === null ? "default" : "outline"}
               onClick={() => setSelectedGroup(null)}
@@ -80,42 +82,59 @@ const UserHosts = () => {
             ))}
           </div>
 
+          {/* Loading State */}
+          {isLoading && (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            </div>
+          )}
+
+          {/* Error State */}
+          {error && (
+            <div className="flex items-center justify-center py-12 text-destructive">
+              <AlertCircle className="w-5 h-5 mr-2" />
+              {error}
+            </div>
+          )}
+
           {/* Hosts List */}
-          <div className="space-y-3">
-            {filteredHosts.map((host) => (
-              <div
-                key={host.id}
-                onClick={() => navigate(`/dashboard/hosts/${host.id}`)}
-                className="flex items-center justify-between p-4 rounded-lg bg-surface/50 border border-border/50 hover:border-primary/50 transition-all cursor-pointer"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-                    <Server className="w-6 h-6 text-background" />
+          {!isLoading && !error && (
+            <div className="space-y-3">
+              {filteredHosts.map((host) => (
+                <div
+                  key={host.id}
+                  onClick={() => navigate(`/dashboard/hosts/${host.id}`)}
+                  className="flex items-center justify-between p-4 rounded-lg bg-surface/50 border border-border/50 hover:border-primary/50 transition-all cursor-pointer"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+                      <Server className="w-6 h-6 text-background" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold">{host.name}</h3>
+                      <p className="text-sm text-muted-foreground">{host.ip}</p>
+                      <p className="text-xs text-muted-foreground mt-1">{host.group}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-semibold">{host.name}</h3>
-                    <p className="text-sm text-muted-foreground">{host.ip}</p>
-                    <p className="text-xs text-muted-foreground mt-1">{host.group}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4">
-                  {host.problems > 0 && (
-                    <Badge variant="destructive" className="gap-1">
-                      <AlertCircle className="w-3 h-3" />
-                      {host.problems} problems
+                  <div className="flex items-center gap-4">
+                    {host.problems > 0 && (
+                      <Badge variant="destructive" className="gap-1">
+                        <AlertCircle className="w-3 h-3" />
+                        {host.problems} problems
+                      </Badge>
+                    )}
+                    <Badge
+                      variant={host.status === "online" ? "default" : "secondary"}
+                      className="gap-1"
+                    >
+                      <CheckCircle className="w-3 h-3" />
+                      {host.status}
                     </Badge>
-                  )}
-                  <Badge
-                    variant={host.status === "online" ? "default" : "secondary"}
-                    className="gap-1"
-                  >
-                    <CheckCircle className="w-3 h-3" />
-                    {host.status}
-                  </Badge>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </Card>
       </div>
     </UserLayout>
