@@ -5,10 +5,63 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft, Server, Activity, HardDrive, Cpu } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useHosts } from "@/hooks/useHosts";
+
+const inferOS = (name: string): string => {
+  const lowerName = name.toLowerCase();
+  if (lowerName.includes("ubuntu")) return "Ubuntu";
+  if (lowerName.includes("centos")) return "CentOS";
+  if (lowerName.includes("debian")) return "Debian";
+  if (lowerName.includes("redhat") || lowerName.includes("rhel")) return "Red Hat";
+  if (lowerName.includes("windows")) return "Windows";
+  if (lowerName.includes("linux")) return "Linux";
+  return "Unknown";
+};
 
 const UserHostDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const { hosts, isLoading, error } = useHosts();
+
+  const host = hosts.find(
+    (h) => h.hostid === id || h.host === id || h.name === id
+  );
+
+  if (isLoading) {
+    return (
+      <UserLayout>
+        <div className="flex items-center justify-center h-64">
+          <p className="text-muted-foreground">Loading host details...</p>
+        </div>
+      </UserLayout>
+    );
+  }
+
+  if (error || !host) {
+    return (
+      <UserLayout>
+        <div className="space-y-6 animate-fade-in">
+          <div className="flex items-center gap-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate("/dashboard/hosts")}
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </Button>
+            <h1 className="text-2xl font-bold text-destructive">Host not found</h1>
+          </div>
+          <p className="text-muted-foreground">
+            {error || "The requested host could not be found."}
+          </p>
+        </div>
+      </UserLayout>
+    );
+  }
+
+  const displayName = host.name || host.host;
+  const displayIP = host.ip || "—";
+  const displayOS = inferOS(host.name || host.host);
 
   return (
     <UserLayout>
@@ -24,10 +77,10 @@ const UserHostDetail = () => {
             </Button>
             <div>
               <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                web-server-{id}
+                {displayName}
               </h1>
               <p className="text-muted-foreground mt-1">
-                192.168.1.{id}0 • Ubuntu 22.04 LTS
+                {displayIP} • {displayOS}
               </p>
             </div>
           </div>
@@ -42,7 +95,7 @@ const UserHostDetail = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">CPU Usage</p>
-                <p className="text-2xl font-bold mt-1">45%</p>
+                <p className="text-2xl font-bold mt-1">N/A</p>
               </div>
               <Cpu className="w-8 h-8 text-primary" />
             </div>
@@ -51,7 +104,7 @@ const UserHostDetail = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Memory</p>
-                <p className="text-2xl font-bold mt-1">68%</p>
+                <p className="text-2xl font-bold mt-1">N/A</p>
               </div>
               <Activity className="w-8 h-8 text-accent" />
             </div>
@@ -60,7 +113,7 @@ const UserHostDetail = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Disk Usage</p>
-                <p className="text-2xl font-bold mt-1">32%</p>
+                <p className="text-2xl font-bold mt-1">N/A</p>
               </div>
               <HardDrive className="w-8 h-8 text-success" />
             </div>
@@ -69,7 +122,7 @@ const UserHostDetail = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Uptime</p>
-                <p className="text-2xl font-bold mt-1">99.9%</p>
+                <p className="text-2xl font-bold mt-1">N/A</p>
               </div>
               <Server className="w-8 h-8 text-primary" />
             </div>
@@ -90,19 +143,19 @@ const UserHostDetail = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="text-sm text-muted-foreground">Hostname</p>
-                  <p className="font-medium">web-server-{id}</p>
+                  <p className="font-medium">{displayName}</p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">IP Address</p>
-                  <p className="font-medium">192.168.1.{id}0</p>
+                  <p className="font-medium">{displayIP}</p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">OS</p>
-                  <p className="font-medium">Ubuntu 22.04 LTS</p>
+                  <p className="font-medium">{displayOS}</p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Uptime</p>
-                  <p className="font-medium">42 days, 8 hours</p>
+                  <p className="font-medium">Data not available</p>
                 </div>
               </div>
             </Card>
