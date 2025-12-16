@@ -21,15 +21,15 @@ const UserHosts = () => {
     ip: host.ip || "—",
     status: "online",
     problems: 0,
-    group: host.hostgroups,
+    group: host.hostgroups?.join(", ") || "—",
   }));
 
-  const groups = Array.from(new Set(mappedHosts.map(h => h.group)));
+  const groups = Array.from(new Set(hosts.flatMap(h => h.hostgroups || [])));
   
   const filteredHosts = mappedHosts.filter(host => {
     const matchesSearch = host.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
                          host.ip.includes(searchQuery);
-    const matchesGroup = !selectedGroup || host.group === selectedGroup;
+    const matchesGroup = !selectedGroup || host.group.includes(selectedGroup);
     return matchesSearch && matchesGroup;
   });
 

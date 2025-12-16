@@ -1,17 +1,21 @@
 import { useState, useEffect } from "react";
 
+export interface HostMetrics {
+  cpu_percent: number | null;
+  memory_percent: number | null;
+  disk_percent: number | null;
+  uptime_days: number | null;
+  uptime_hours: number | null;
+}
+
 export interface Host {
   hostid: string;
   host: string;
   name: string;
   ip?: string;
-  hostgroups: string;
-  metrics: string;
+  hostgroups: string[];
+  metrics: HostMetrics;
   collected_at: string;
-}
-
-interface HostResponse {
-  HostMetrics: Host;
 }
 
 interface UseHostsReturn {
@@ -37,9 +41,9 @@ export const useHosts = (): UseHostsReturn => {
           throw new Error(`Failed to fetch hosts: ${response.status}`);
         }
         
-        const data: HostResponse[] = await response.json();
-        const extractedHosts = data.map((item) => item.HostMetrics);
-        setHosts(extractedHosts);
+        // New format returns flat array directly
+        const data: Host[] = await response.json();
+        setHosts(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to fetch hosts");
       } finally {
