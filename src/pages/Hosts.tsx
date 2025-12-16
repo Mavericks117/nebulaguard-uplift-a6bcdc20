@@ -18,17 +18,17 @@ const Hosts = () => {
     name: host.name || host.host,
     ip: host.ip || "—",
     status: "healthy",
-    cpu: 0,
-    memory: 0,
-    uptime: "—",
-    group: host.hostgroups,
+    cpu: host.metrics?.cpu_percent ?? 0,
+    memory: host.metrics?.memory_percent ?? 0,
+    uptime: host.metrics?.uptime_days != null ? `${host.metrics.uptime_days}d ${host.metrics.uptime_hours ?? 0}h` : "—",
+    group: host.hostgroups?.join(", ") || "—",
   }));
 
-  const groups = Array.from(new Set(mappedHosts.map(h => h.group)));
+  const groups = Array.from(new Set(hosts.flatMap(h => h.hostgroups || [])));
   
   const filteredHosts = mappedHosts.filter(host => {
     const matchesSearch = host.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesGroup = !selectedGroup || host.group === selectedGroup;
+    const matchesGroup = !selectedGroup || host.group.includes(selectedGroup);
     return matchesSearch && matchesGroup;
   });
 
