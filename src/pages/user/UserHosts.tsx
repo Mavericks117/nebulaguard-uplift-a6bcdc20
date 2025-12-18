@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import UserLayout from "@/layouts/UserLayout";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -6,15 +7,25 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Search, Server, AlertCircle, CheckCircle, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import {
+  selectHosts,
+  selectHostsLoading,
+  selectHostsError,
+} from "@/store/slices/hostsSlice";
 import { useHosts } from "@/hooks/useHosts";
-
 
 const UserHosts = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
 
-  const { hosts, isLoading, error } = useHosts();
+  // Initialize the hook to start fetch cycle
+  useHosts();
+
+  // Read directly from Redux store
+  const hosts = useSelector(selectHosts);
+  const isLoading = useSelector(selectHostsLoading);
+  const error = useSelector(selectHostsError);
 
   const mappedHosts = hosts.map((host) => ({
     id: host.hostid,
@@ -84,20 +95,20 @@ const UserHosts = () => {
             ))}
           </div>
 
-          {isLoading && (
+          {isLoading && hosts.length === 0 && (
             <div className="flex items-center justify-center py-12">
               <Loader2 className="w-8 h-8 animate-spin text-primary" />
             </div>
           )}
 
-          {error && (
+          {error && hosts.length === 0 && (
             <div className="flex items-center justify-center py-12 text-destructive">
               <AlertCircle className="w-5 h-5 mr-2" />
               {error}
             </div>
           )}
 
-          {!isLoading && !error && (
+          {(!isLoading || hosts.length > 0) && !error && (
             <div className="space-y-3">
               {filteredHosts.length === 0 ? (
                 <div className="text-center py-12 text-muted-foreground">

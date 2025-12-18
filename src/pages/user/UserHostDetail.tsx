@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import UserLayout from "@/layouts/UserLayout";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -5,6 +6,11 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft, Server, Activity, HardDrive, Cpu } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
+import {
+  selectHosts,
+  selectHostsLoading,
+  selectHostsError,
+} from "@/store/slices/hostsSlice";
 import { useHosts } from "@/hooks/useHosts";
 
 const capitalizeHostType = (type: string): string => {
@@ -14,11 +20,19 @@ const capitalizeHostType = (type: string): string => {
 const UserHostDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { hosts, isLoading, error } = useHosts();
+
+  // Initialize the hook to ensure fetch cycle is running
+  useHosts();
+
+  // Read directly from Redux store - instant access to cached data
+  const hosts = useSelector(selectHosts);
+  const isLoading = useSelector(selectHostsLoading);
+  const error = useSelector(selectHostsError);
 
   const host = hosts.find((h) => h.hostid === id);
 
-  if (isLoading) {
+  // Only show loading if no cached data at all
+  if (isLoading && hosts.length === 0) {
     return (
       <UserLayout>
         <div className="flex items-center justify-center h-64">
@@ -28,7 +42,7 @@ const UserHostDetail = () => {
     );
   }
 
-  if (error || !host) {
+  if ((error && hosts.length === 0) || !host) {
     return (
       <UserLayout>
         <div className="space-y-6 animate-fade-in">
@@ -52,7 +66,7 @@ const UserHostDetail = () => {
 
   const displayName = host.hostname;
   const displayIP = host.ip || "—";
-  const displayOS = capitalizeHostType(host.host_type); // e.g., "Linux", "Vmware"
+  const displayOS = capitalizeHostType(host.host_type);
 
   return (
     <UserLayout>
