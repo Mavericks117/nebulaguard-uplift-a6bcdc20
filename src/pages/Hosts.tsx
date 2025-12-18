@@ -15,13 +15,13 @@ const Hosts = () => {
 
   const mappedHosts = hosts.map((host) => ({
     id: host.hostid,
-    name: host.name || host.host,
+    name: host.hostname,
     ip: host.ip || "—",
     status: "healthy",
     cpu: host.metrics?.cpu_percent ?? 0,
     memory: host.metrics?.memory_percent ?? 0,
-    uptime: host.metrics?.uptime_days != null ? `${host.metrics.uptime_days}d ${host.metrics.uptime_hours ?? 0}h` : "—",
-    group: host.hostgroups?.join(", ") || "—",
+    uptime: host.uptime_days,
+    group: host.hostgroup,
   }));
 
   const groups = Array.from(new Set(hosts.flatMap(h => h.hostgroups || [])));
