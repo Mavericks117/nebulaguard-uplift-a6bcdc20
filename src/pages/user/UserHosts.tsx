@@ -22,10 +22,10 @@ const UserHosts = () => {
     ip: host.ip || "—",
     status: "online",
     problems: 0,
-    group: host.hostgroup || "Uncategorized",
+    group: host.hostgroup,
   }));
 
-  const groups = Array.from(new Set(mappedHosts.map((h) => h.group)));
+  const groups = Array.from(new Set(hosts.flatMap((h) => h.hostgroups || [])));
 
   const filteredHosts = mappedHosts.filter((host) => {
     const matchesSearch =
