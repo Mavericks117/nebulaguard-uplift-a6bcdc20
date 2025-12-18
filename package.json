@@ -43,7 +43,7 @@
     "@react-three/fiber": "^8.18.0",
     "@reduxjs/toolkit": "^2.11.2",
     "@studio-freight/lenis": "^1.0.42",
-    "@supabase/supabase-js": "^2.86.0",
+    "@supabase/supabase-js": "^2.88.0",
     "@tanstack/react-query": "^5.83.0",
     "@types/react-window": "^2.0.0",
     "class-variance-authority": "^0.7.1",
