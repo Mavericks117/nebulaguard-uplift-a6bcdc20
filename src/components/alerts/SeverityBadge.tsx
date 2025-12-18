@@ -1,8 +1,8 @@
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { X, AlertTriangle, AlertCircle, Info } from "lucide-react";
+import { X, AlertTriangle, AlertCircle, Info, Skull, Minus } from "lucide-react";
 
-export type AlertSeverity = "critical" | "high" | "warning" | "info";
+export type AlertSeverity = "disaster" | "critical" | "high" | "warning" | "average" | "info";
 
 interface SeverityBadgeProps {
   severity: AlertSeverity;
@@ -16,6 +16,11 @@ interface SeverityConfig {
 }
 
 const severityConfig: Record<AlertSeverity, SeverityConfig> = {
+  disaster: {  
+    label: "DISASTER",
+    className: "bg-purple-600 text-background border-purple-600 font-bold",
+    icon: Skull,  
+  },
   critical: {
     label: "CRITICAL",
     className: "bg-destructive text-background border-destructive font-bold",
@@ -30,6 +35,11 @@ const severityConfig: Record<AlertSeverity, SeverityConfig> = {
     label: "WARNING",
     className: "bg-warning text-background border-warning font-bold",
     icon: AlertCircle,
+  },
+  average: {  
+    label: "AVERAGE",
+    className: "bg-amber-500 text-background border-amber-500 font-bold",
+    icon: Minus,  
   },
   info: {
     label: "INFO",

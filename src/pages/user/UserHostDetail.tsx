@@ -7,15 +7,8 @@ import { ArrowLeft, Server, Activity, HardDrive, Cpu } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useHosts } from "@/hooks/useHosts";
 
-const inferOS = (name: string): string => {
-  const lowerName = name.toLowerCase();
-  if (lowerName.includes("ubuntu")) return "Ubuntu";
-  if (lowerName.includes("centos")) return "CentOS";
-  if (lowerName.includes("debian")) return "Debian";
-  if (lowerName.includes("redhat") || lowerName.includes("rhel")) return "Red Hat";
-  if (lowerName.includes("windows")) return "Windows";
-  if (lowerName.includes("linux")) return "Linux";
-  return "Unknown";
+const capitalizeHostType = (type: string): string => {
+  return type.charAt(0).toUpperCase() + type.slice(1);
 };
 
 const UserHostDetail = () => {
@@ -23,9 +16,7 @@ const UserHostDetail = () => {
   const { id } = useParams();
   const { hosts, isLoading, error } = useHosts();
 
-  const host = hosts.find(
-    (h) => h.hostid === id || h.host === id || h.name === id
-  );
+  const host = hosts.find((h) => h.hostid === id);
 
   if (isLoading) {
     return (
@@ -59,9 +50,9 @@ const UserHostDetail = () => {
     );
   }
 
-  const displayName = host.name || host.host;
+  const displayName = host.hostname;
   const displayIP = host.ip || "—";
-  const displayOS = inferOS(host.name || host.host);
+  const displayOS = capitalizeHostType(host.host_type); // e.g., "Linux", "Vmware"
 
   return (
     <UserLayout>
@@ -90,39 +81,43 @@ const UserHostDetail = () => {
           </Badge>
         </div>
 
+        {/* Real Metrics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <Card className="p-6 bg-card/50 backdrop-blur border-border/50">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">CPU Usage</p>
-                <p className="text-2xl font-bold mt-1">N/A</p>
+                <p className="text-2xl font-bold mt-1">{host.cpu_usage}</p>
               </div>
               <Cpu className="w-8 h-8 text-primary" />
             </div>
           </Card>
+
           <Card className="p-6 bg-card/50 backdrop-blur border-border/50">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Memory</p>
-                <p className="text-2xl font-bold mt-1">N/A</p>
+                <p className="text-2xl font-bold mt-1">{host.memory_usage}</p>
               </div>
               <Activity className="w-8 h-8 text-accent" />
             </div>
           </Card>
+
           <Card className="p-6 bg-card/50 backdrop-blur border-border/50">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Disk Usage</p>
-                <p className="text-2xl font-bold mt-1">N/A</p>
+                <p className="text-2xl font-bold mt-1">{host.disk_usage}</p>
               </div>
               <HardDrive className="w-8 h-8 text-success" />
             </div>
           </Card>
+
           <Card className="p-6 bg-card/50 backdrop-blur border-border/50">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Uptime</p>
-                <p className="text-2xl font-bold mt-1">N/A</p>
+                <p className="text-2xl font-bold mt-1">{host.uptime_days}</p>
               </div>
               <Server className="w-8 h-8 text-primary" />
             </div>
@@ -155,7 +150,7 @@ const UserHostDetail = () => {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Uptime</p>
-                  <p className="font-medium">Data not available</p>
+                  <p className="font-medium">{host.uptime_days}</p>
                 </div>
               </div>
             </Card>
