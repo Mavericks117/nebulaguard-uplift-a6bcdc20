@@ -15,41 +15,32 @@ const REFRESH_INTERVAL = 120000; // 2 minutes
 
 export type { Host };
 
-interface UseHostsReturn {
-  hosts: Host[];
-  isLoading: boolean;
-  error: string | null;
-  lastUpdated: Date | null;
-  refresh: () => Promise<void>;
-}
-
-export const useHosts = (): UseHostsReturn => {
+export const useHosts = () => {
   const dispatch = useDispatch<AppDispatch>();
+
   const hosts = useSelector(selectHosts);
   const isLoading = useSelector(selectHostsLoading);
   const error = useSelector(selectHostsError);
   const lastUpdatedTimestamp = useSelector(selectHostsLastUpdated);
-  
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const initialFetchDone = useRef(false);
 
-  // Initial fetch - only if no cached data or stale
+  const initializedRef = useRef(false);
+  const intervalRef = useRef<number | null>(null);
+
+  // Initial load (cache-first)
   useEffect(() => {
-    if (!initialFetchDone.current) {
-      initialFetchDone.current = true;
-      if (hosts.length === 0) {
-        // No cache - do regular fetch with loading
-        dispatch(fetchHosts());
-      } else {
-        // Have cache - do silent background refresh
-        dispatch(fetchHostsSilent());
-      }
+    if (initializedRef.current) return;
+    initializedRef.current = true;
+
+    if (hosts.length === 0) {
+      dispatch(fetchHosts()); // show loading only if no cache
+    } else {
+      dispatch(fetchHostsSilent()); // silent refresh if cache exists
     }
   }, [dispatch, hosts.length]);
 
-  // Auto-refresh every 2 minutes — silent (no loading state)
+  // Silent auto-refresh
   useEffect(() => {
-    intervalRef.current = setInterval(() => {
+    intervalRef.current = window.setInterval(() => {
       dispatch(fetchHostsSilent());
     }, REFRESH_INTERVAL);
 
@@ -68,7 +59,9 @@ export const useHosts = (): UseHostsReturn => {
     hosts,
     isLoading,
     error,
-    lastUpdated: lastUpdatedTimestamp ? new Date(lastUpdatedTimestamp) : null,
+    lastUpdated: lastUpdatedTimestamp
+      ? new Date(lastUpdatedTimestamp)
+      : null,
     refresh,
   };
 };
