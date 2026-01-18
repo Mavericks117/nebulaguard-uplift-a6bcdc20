@@ -45,7 +45,7 @@ const AIShowcase = () => {
           className="text-center mb-16"
         >
           <h2 className="text-5xl md:text-6xl font-bold mb-4">
-            <span className="bg-gradient-to-r from-[#d900ff] to-[#ff006e] bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[#43BFC7] to-[#FAA41E] bg-clip-text text-transparent">
               AI Assistant
             </span>
           </h2>
@@ -75,7 +75,7 @@ const AIShowcase = () => {
                     return (
                       <motion.div
                         key={i}
-                        className="absolute w-4 h-4 rounded-full bg-gradient-to-r from-[#00f0ff] to-[#d900ff]"
+                        className="absolute w-4 h-4 rounded-full bg-gradient-to-r from-[#43BFC7] to-[#FAA41E]"
                         style={{
                           left: `${x}%`,
                           top: `${y}%`,
@@ -96,7 +96,7 @@ const AIShowcase = () => {
                   
                   {/* Center node */}
                   <motion.div
-                    className="absolute left-1/2 top-1/2 w-16 h-16 rounded-full bg-gradient-to-r from-[#d900ff] to-[#ff006e] flex items-center justify-center"
+                    className="absolute left-1/2 top-1/2 w-16 h-16 rounded-full bg-gradient-to-r from-[#43BFC7] to-[#FAA41E] flex items-center justify-center"
                     style={{ transform: 'translate(-50%, -50%)' }}
                     animate={{
                       scale: [1, 1.1, 1],
@@ -107,7 +107,7 @@ const AIShowcase = () => {
                       rotate: { duration: 10, repeat: Infinity, ease: "linear" }
                     }}
                   >
-                    <FiCpu className="w-8 h-8 text-background" />
+                    <FiCpu className="w-8 h-8 text-[#04143C]" />
                   </motion.div>
 
                   {/* Connection lines */}
@@ -139,8 +139,8 @@ const AIShowcase = () => {
                     })}
                     <defs>
                       <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#00f0ff" />
-                        <stop offset="100%" stopColor="#d900ff" />
+                        <stop offset="0%" stopColor="#43BFC7" />
+                        <stop offset="100%" stopColor="#FAA41E" />
                       </linearGradient>
                     </defs>
                   </svg>
@@ -148,7 +148,7 @@ const AIShowcase = () => {
               </div>
 
               {/* Glow effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-[#00f0ff]/20 via-[#d900ff]/20 to-[#ff006e]/20 blur-3xl" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#43BFC7]/20 via-[#FAA41E]/20 to-[#43BFC7]/20 blur-3xl" />
             </div>
           </motion.div>
 
@@ -157,10 +157,10 @@ const AIShowcase = () => {
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="glass-card p-8 rounded-3xl border border-[#d900ff]/30"
+            className="glass-card p-8 rounded-3xl border border-[#43BFC7]/30"
           >
             <div className="flex items-center gap-3 mb-6 pb-4 border-b border-border/50">
-              <FiMessageCircle className="w-6 h-6 text-[#d900ff]" />
+              <FiMessageCircle className="w-6 h-6 text-[#43BFC7]" />
               <h3 className="text-xl font-bold text-foreground">AI Assistant</h3>
               <div className="ml-auto flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-[#39ff14] animate-pulse" />
@@ -179,8 +179,8 @@ const AIShowcase = () => {
                   <div
                     className={`max-w-[80%] p-4 rounded-2xl ${
                       msg.role === 'user'
-                        ? 'bg-gradient-to-r from-[#00f0ff] to-[#d900ff] text-background'
-                        : 'bg-background/50 border border-[#d900ff]/30 text-foreground'
+                        ? 'bg-gradient-to-r from-[#43BFC7] to-[#FAA41E] text-[#04143C]'
+                        : 'bg-background/50 border border-[#43BFC7]/30 text-foreground'
                     }`}
                   >
                     <p className="text-sm leading-relaxed">{msg.text}</p>
@@ -190,7 +190,7 @@ const AIShowcase = () => {
             </div>
 
             <div className="mt-6 pt-6 border-t border-border/50">
-              <button className="w-full py-4 bg-gradient-to-r from-[#d900ff] to-[#ff006e] rounded-2xl font-semibold text-background hover:shadow-[0_0_30px_rgba(217,0,255,0.5)] transition-all">
+              <button className="w-full py-4 bg-gradient-to-r from-[#FAA41E] to-[#e8941a] rounded-2xl font-semibold text-[#04143C] hover:shadow-[0_0_30px_rgba(250,164,30,0.5)] transition-all">
                 Talk to Our AI Now
               </button>
             </div>

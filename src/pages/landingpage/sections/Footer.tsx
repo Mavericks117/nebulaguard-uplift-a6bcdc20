@@ -30,16 +30,16 @@ const Footer = () => {
   };
 
   const socials = [
-    { icon: FiGithub, href: "#", color: "#00f0ff" },
-    { icon: FiTwitter, href: "#", color: "#d900ff" },
-    { icon: FiLinkedin, href: "#", color: "#ff006e" },
+    { icon: FiGithub, href: "#", color: "#43BFC7" },
+    { icon: FiTwitter, href: "#", color: "#FAA41E" },
+    { icon: FiLinkedin, href: "#", color: "#43BFC7" },
     { icon: FiMail, href: "#", color: "#39ff14" }
   ];
 
   return (
-    <footer className="relative py-20 border-t border-border/50 overflow-hidden">
+    <footer className="relative py-20 border-t border-border/50 overflow-hidden" style={{ background: "rgba(4, 20, 60, 0.8)" }}>
       {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#00f0ff]/5 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#43BFC7]/5 via-transparent to-transparent" />
       
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         {/* Top section */}
@@ -52,7 +52,7 @@ const Footer = () => {
               viewport={{ once: true }}
             >
               <h3 className="text-3xl font-bold mb-4">
-                <span className="bg-gradient-to-r from-[#00f0ff] to-[#d900ff] bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-[#43BFC7] to-[#FAA41E] bg-clip-text text-transparent">
                   Jarvis™
                 </span>
               </h3>
@@ -71,12 +71,12 @@ const Footer = () => {
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.1 }}
                     whileHover={{ scale: 1.2, rotate: 5 }}
-                    className="w-10 h-10 rounded-full glass-card border border-border/50 flex items-center justify-center hover:border-[#00f0ff] transition-all group"
+                    className="w-10 h-10 rounded-full glass-card border border-border/50 flex items-center justify-center hover:border-[#43BFC7] transition-all group"
                     style={{
                       boxShadow: `0 0 0 rgba(${social.color}, 0)`
                     }}
                   >
-                    <social.icon className="w-5 h-5 text-foreground group-hover:text-[#00f0ff] transition-colors" />
+                    <social.icon className="w-5 h-5 text-foreground group-hover:text-[#43BFC7] transition-colors" />
                   </motion.a>
                 ))}
               </div>
@@ -98,10 +98,10 @@ const Footer = () => {
                   <li key={i}>
                     <a
                       href={link.href}
-                      className="text-muted-foreground hover:text-[#00f0ff] transition-colors relative group inline-block"
+                      className="text-muted-foreground hover:text-[#43BFC7] transition-colors relative group inline-block"
                     >
                       {link.name}
-                      <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#00f0ff] to-[#d900ff] group-hover:w-full transition-all duration-300" />
+                      <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#43BFC7] to-[#FAA41E] group-hover:w-full transition-all duration-300" />
                     </a>
                   </li>
                 ))}
@@ -118,7 +118,7 @@ const Footer = () => {
           className="pt-8 border-t border-border/50 flex flex-col md:flex-row justify-between items-center gap-4"
         >
           <p className="text-muted-foreground text-sm flex items-center gap-2">
-            Made with <FiHeart className="text-[#ff006e] w-4 h-4 animate-pulse" /> by the Jarvis Team
+            Made with <FiHeart className="text-[#FAA41E] w-4 h-4 animate-pulse" /> by the Jarvis Team
           </p>
           
           <p className="text-muted-foreground text-sm">
@@ -127,7 +127,7 @@ const Footer = () => {
         </motion.div>
 
         {/* Decorative elements */}
-        <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#00f0ff]/50 to-transparent" />
+        <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#43BFC7]/50 to-transparent" />
       </div>
     </footer>
   );
