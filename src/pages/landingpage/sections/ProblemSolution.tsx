@@ -23,7 +23,7 @@ const ProblemSolution = () => {
           className="text-5xl md:text-6xl font-bold text-center mb-20"
         >
           <span className="text-foreground">You're </span>
-          <span className="text-[#ff006e]">Drowning in Alerts</span>
+          <span className="text-[#FAA41E]">Drowning in Alerts</span>
           <span className="text-foreground">. We Fix That.</span>
         </motion.h2>
 
@@ -34,11 +34,11 @@ const ProblemSolution = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="glass-card p-6 rounded-3xl border border-[#ff006e]/30 relative overflow-hidden"
+            className="glass-card p-6 rounded-3xl border border-[#FAA41E]/30 relative overflow-hidden"
           >
-            <div className="absolute inset-0 bg-[#ff006e]/5 animate-pulse" />
+            <div className="absolute inset-0 bg-[#FAA41E]/5 animate-pulse" />
             <div className="relative">
-              <div className="flex items-center gap-2 mb-4 text-[#ff006e]">
+              <div className="flex items-center gap-2 mb-4 text-[#FAA41E]">
                 <FiAlertTriangle className="w-6 h-6" />
                 <span className="font-bold">Legacy Zabbix</span>
               </div>
@@ -50,7 +50,7 @@ const ProblemSolution = () => {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.1 }}
-                    className="p-3 bg-background/50 rounded-lg border border-[#ff006e]/20 text-sm font-mono"
+                    className="p-3 bg-background/50 rounded-lg border border-[#FAA41E]/20 text-sm font-mono"
                   >
                     {alert}
                   </motion.div>
@@ -58,7 +58,7 @@ const ProblemSolution = () => {
               </div>
               
               <div className="mt-4 text-center">
-                <span className="text-3xl font-bold text-[#ff006e]">500+</span>
+                <span className="text-3xl font-bold text-[#FAA41E]">500+</span>
                 <p className="text-muted-foreground">alerts/day</p>
               </div>
             </div>
@@ -81,11 +81,11 @@ const ProblemSolution = () => {
                   repeat: Infinity,
                   ease: "easeInOut"
                 }}
-                className="text-9xl font-bold text-[#00f0ff] opacity-50"
+                className="text-9xl font-bold text-[#43BFC7] opacity-50"
               >
                 ⚡
               </motion.div>
-              <div className="absolute inset-0 bg-gradient-to-r from-[#00f0ff] to-[#d900ff] blur-3xl opacity-30" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#43BFC7] to-[#FAA41E] blur-3xl opacity-30" />
             </div>
           </motion.div>
 
@@ -124,10 +124,10 @@ const ProblemSolution = () => {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.7 }}
-                  className="p-4 bg-background/50 rounded-lg border border-[#00f0ff]/30"
+                  className="p-4 bg-background/50 rounded-lg border border-[#43BFC7]/30"
                 >
                   <div className="flex items-start gap-3">
-                    <FiCheckCircle className="w-5 h-5 text-[#00f0ff] mt-1 flex-shrink-0" />
+                    <FiCheckCircle className="w-5 h-5 text-[#43BFC7] mt-1 flex-shrink-0" />
                     <div>
                       <p className="font-semibold text-foreground">Auto-Remediation Applied</p>
                       <p className="text-sm text-muted-foreground">Scaled cluster-05 → Issue resolved</p>
@@ -153,7 +153,7 @@ const ProblemSolution = () => {
           className="text-center mt-16"
         >
           <p className="text-3xl font-bold">
-            <span className="text-[#ff006e]">From 500 alerts/day</span>
+            <span className="text-[#FAA41E]">From 500 alerts/day</span>
             <span className="text-foreground"> → </span>
             <span className="text-[#39ff14]">8 insights/day</span>
           </p>

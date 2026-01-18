@@ -40,7 +40,7 @@ const Pricing = () => {
         >
           <h2 className="text-5xl md:text-6xl font-bold mb-4">
             <span className="text-foreground">Enterprise </span>
-            <span className="bg-gradient-to-r from-[#00f0ff] to-[#d900ff] bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[#43BFC7] to-[#FAA41E] bg-clip-text text-transparent">
               Pricing
             </span>
           </h2>
@@ -54,10 +54,10 @@ const Pricing = () => {
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          className="glass-card rounded-3xl border-2 border-[#00f0ff]/50 relative overflow-hidden"
+          className="glass-card rounded-3xl border-2 border-[#43BFC7]/50 relative overflow-hidden"
         >
           {/* Animated gradient background */}
-          <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-[#00f0ff]/10 via-[#d900ff]/10 to-[#ff006e]/10 animate-gradient-shift pointer-events-none" />
+          <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-[#43BFC7]/10 via-[#FAA41E]/10 to-[#43BFC7]/10 animate-gradient-shift pointer-events-none" />
 
           {/* MAIN CONTENT WRAPPER */}
           <div className="relative z-10 px-6 sm:px-10 py-10 space-y-10">
@@ -66,7 +66,7 @@ const Pricing = () => {
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="absolute mt-4 top-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-gradient-to-r from-[#00f0ff] to-[#d900ff] rounded-full text-background font-bold text-sm"
+              className="absolute mt-4 top-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-gradient-to-r from-[#FAA41E] to-[#e8941a] rounded-full text-[#04143C] font-bold text-sm"
             >
               MOST POPULAR
             </motion.div>
@@ -74,7 +74,7 @@ const Pricing = () => {
             {/* Price */}
             <div className="text-center space-y-4">
               <div className="flex items-baseline justify-center gap-2">
-                <span className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-[#00f0ff] to-[#d900ff] bg-clip-text text-transparent">
+                <span className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-[#43BFC7] to-[#FAA41E] bg-clip-text text-transparent">
                   $799
                 </span>
                 <div className="text-left">
@@ -99,8 +99,8 @@ const Pricing = () => {
                   transition={{ delay: i * 0.1 }}
                   className="flex items-center gap-3"
                 >
-                  <div className="w-6 h-6 rounded-full bg-gradient-to-r from-[#39ff14] to-[#00f0ff] flex items-center justify-center flex-shrink-0">
-                    <FiCheck className="w-4 h-4 text-background" />
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-r from-[#39ff14] to-[#43BFC7] flex items-center justify-center flex-shrink-0">
+                    <FiCheck className="w-4 h-4 text-[#04143C]" />
                   </div>
 
                   <span className="text-foreground">{feature}</span>
@@ -119,9 +119,9 @@ const Pricing = () => {
           transition={{ delay: 0.3 }}
           className="mt-12 text-center"
         >
-          <div className="glass-card rounded-3xl p-8 border-2 border-[#00f0ff]/30">
+          <div className="glass-card rounded-3xl p-8 border-2 border-[#43BFC7]/30">
             <h3 className="text-2xl md:text-3xl font-bold mb-4">
-              <span className="bg-gradient-to-r from-[#00f0ff] to-[#d900ff] bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-[#43BFC7] to-[#FAA41E] bg-clip-text text-transparent">
                 Ready to See It in Action?
               </span>
             </h3>
@@ -130,7 +130,7 @@ const Pricing = () => {
               No commitment, no sales pitch - just pure value.
             </p>
             <button 
-              className="px-8 py-4 bg-gradient-to-r from-[#00f0ff] to-[#d900ff] rounded-2xl text-background font-semibold hover:scale-105 transition-transform hover:shadow-[0_0_30px_rgba(0,240,255,0.5)]"
+              className="px-8 py-4 bg-gradient-to-r from-[#FAA41E] to-[#e8941a] rounded-2xl text-[#04143C] font-semibold hover:scale-105 transition-transform hover:shadow-[0_0_30px_rgba(250,164,30,0.5)]"
               onClick={() => setIsModalOpen(true)}
             >
               Book Your Demo Now
@@ -157,14 +157,14 @@ const Pricing = () => {
                 onClick={(e) => e.stopPropagation()}
               >
                 {/* Modal Content */}
-                <div className="glass-card rounded-3xl border-2 border-[#00f0ff]/50 p-6 relative overflow-hidden">
+                <div className="glass-card rounded-3xl border-2 border-[#43BFC7]/50 p-6 relative overflow-hidden" style={{ background: "rgba(4, 20, 60, 0.95)" }}>
                   {/* Animated Background */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#00f0ff]/10 via-[#d900ff]/10 to-[#ff006e]/10 animate-pulse" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#43BFC7]/10 via-[#FAA41E]/10 to-[#43BFC7]/10 animate-pulse" />
                   
                   {/* Close Button */}
                   <button
                     onClick={() => setIsModalOpen(false)}
-                    className="absolute top-4 right-4 w-8 h-8 rounded-full bg-gradient-to-r from-[#ff006e] to-[#d900ff] flex items-center justify-center text-background hover:scale-110 transition-transform z-10"
+                    className="absolute top-4 right-4 w-8 h-8 rounded-full bg-gradient-to-r from-[#FAA41E] to-[#e8941a] flex items-center justify-center text-[#04143C] hover:scale-110 transition-transform z-10"
                   >
                     <FiX className="w-4 h-4" />
                   </button>
@@ -172,7 +172,7 @@ const Pricing = () => {
                   {/* Header */}
                   <div className="relative z-10 text-center mb-6"> 
                     <h3 className="text-xl font-bold mb-2"> 
-                      <span className="bg-gradient-to-r from-[#00f0ff] to-[#d900ff] bg-clip-text text-transparent">
+                      <span className="bg-gradient-to-r from-[#43BFC7] to-[#FAA41E] bg-clip-text text-transparent">
                         Book Your Demo
                       </span>
                     </h3>
@@ -185,51 +185,55 @@ const Pricing = () => {
                   <form onSubmit={handleSubmit} className="relative z-10 space-y-3"> 
                     {/* Name Field */}
                     <div className="relative">
-                      <FiUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#00f0ff] w-4 h-4" /> 
+                      <FiUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#43BFC7] w-4 h-4" /> 
                       <input
                         type="text"
                         placeholder="Full Name"
                         required
-                        className="w-full pl-10 pr-4 py-3 glass-card border border-[#00f0ff]/30 rounded-2xl focus:border-[#00f0ff] focus:outline-none text-foreground placeholder-muted-foreground text-sm" 
+                        className="w-full pl-10 pr-4 py-3 glass-card border border-[#43BFC7]/30 rounded-2xl focus:border-[#43BFC7] focus:outline-none text-foreground placeholder-muted-foreground text-sm" 
+                        style={{ background: "rgba(4, 20, 60, 0.8)" }}
                       />
                     </div>
 
                     {/* Email Field */}
                     <div className="relative">
-                      <FiMail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#00f0ff] w-4 h-4" /> 
+                      <FiMail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#43BFC7] w-4 h-4" /> 
                       <input
                         type="email"
                         placeholder="Work Email"
                         required
-                        className="w-full pl-10 pr-4 py-3 glass-card border border-[#00f0ff]/30 rounded-2xl focus:border-[#00f0ff] focus:outline-none text-foreground placeholder-muted-foreground text-sm" 
+                        className="w-full pl-10 pr-4 py-3 glass-card border border-[#43BFC7]/30 rounded-2xl focus:border-[#43BFC7] focus:outline-none text-foreground placeholder-muted-foreground text-sm" 
+                        style={{ background: "rgba(4, 20, 60, 0.8)" }}
                       />
                     </div>
 
                     {/* Company Field */}
                     <div className="relative">
-                      <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#00f0ff] w-4 h-4" />
+                      <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#43BFC7] w-4 h-4" />
                       <input
                         type="text"
                         placeholder="Company Name"
                         required
-                        className="w-full pl-10 pr-4 py-3 glass-card border border-[#00f0ff]/30 rounded-2xl focus:border-[#00f0ff] focus:outline-none text-foreground placeholder-muted-foreground text-sm" 
+                        className="w-full pl-10 pr-4 py-3 glass-card border border-[#43BFC7]/30 rounded-2xl focus:border-[#43BFC7] focus:outline-none text-foreground placeholder-muted-foreground text-sm" 
+                        style={{ background: "rgba(4, 20, 60, 0.8)" }}
                       />
                     </div>
 
                     {/* Message Field */}
                     <div className="relative">
-                      <FiMessageSquare className="absolute left-3 top-3 text-[#00f0ff] w-4 h-4" /> 
+                      <FiMessageSquare className="absolute left-3 top-3 text-[#43BFC7] w-4 h-4" /> 
                       <textarea
                         placeholder="What would you like to see in the demo?"
                         rows={2} 
-                        className="w-full pl-10 pr-4 py-3 glass-card border border-[#00f0ff]/30 rounded-2xl focus:border-[#00f0ff] focus:outline-none text-foreground placeholder-muted-foreground resize-none text-sm" 
+                        className="w-full pl-10 pr-4 py-3 glass-card border border-[#43BFC7]/30 rounded-2xl focus:border-[#43BFC7] focus:outline-none text-foreground placeholder-muted-foreground resize-none text-sm" 
+                        style={{ background: "rgba(4, 20, 60, 0.8)" }}
                       />
                     </div>
 
                     {/* Submit Button */}
                     <button
                       type="submit"
-                      className="w-full py-3 bg-gradient-to-r from-[#00f0ff] to-[#d900ff] rounded-2xl text-background font-semibold hover:scale-105 transition-transform flex items-center justify-center gap-2 hover:shadow-[0_0_30px_rgba(0,240,255,0.5)] text-sm"
+                      className="w-full py-3 bg-gradient-to-r from-[#FAA41E] to-[#e8941a] rounded-2xl text-[#04143C] font-semibold hover:scale-105 transition-transform flex items-center justify-center gap-2 hover:shadow-[0_0_30px_rgba(250,164,30,0.5)] text-sm"
                     >
                       <FiSend className="w-4 h-4" />
                       Request Demo
@@ -241,7 +245,7 @@ const Pricing = () => {
                     {[...Array(6)].map((_, i) => ( 
                       <motion.div
                         key={i}
-                        className="absolute w-1 h-1 bg-[#00f0ff] rounded-full"
+                        className="absolute w-1 h-1 bg-[#43BFC7] rounded-full"
                         initial={{ 
                           x: Math.random() * 250, 
                           y: Math.random() * 300, 
@@ -284,9 +288,9 @@ const Pricing = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.5 + i * 0.1 }}
-              className="glass-surface p-6 rounded-2xl border border-border/30 text-center"
+              className="glass-surface p-6 rounded-2xl border border-[#43BFC7]/30 text-center"
             >
-              <h4 className="text-lg font-bold text-primary mb-2">{item.title}</h4>
+              <h4 className="text-lg font-bold text-[#43BFC7] mb-2">{item.title}</h4>
               <p className="text-sm text-muted-foreground">{item.desc}</p>
             </motion.div>
           ))}

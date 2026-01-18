@@ -22,7 +22,7 @@ const LandingPage = () => {
   return (
     <HelmetProvider>
       <SmoothScroll>
-        <div className="relative bg-[#0b0e17] text-foreground overflow-x-hidden">
+        <div className="relative bg-[#04143C] text-foreground overflow-x-hidden">
           <SchemaMetadata />
           <ProgressBar />
           <MagneticCursor />
@@ -34,7 +34,7 @@ const LandingPage = () => {
       {/* Scanlines overlay */}
       <div className="fixed inset-0 pointer-events-none z-[1] opacity-[0.03]" 
            style={{
-             backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 240, 255, 0.03) 2px, rgba(0, 240, 255, 0.03) 4px)'
+             backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(67, 191, 199, 0.03) 2px, rgba(67, 191, 199, 0.03) 4px)'
            }} />
       
           <main className="relative z-10 pt-20">
