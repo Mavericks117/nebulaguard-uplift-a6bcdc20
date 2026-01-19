@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiMenu, FiX } from "react-icons/fi";
+import avisLogo from "@/assets/avis-logo.png";
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -27,7 +28,6 @@ const Navigation = () => {
     { name: "Features", id: "features" },
     { name: "Demo", id: "demo" },
     { name: "Pricing", id: "pricing" },
-    { name: "Contact", id: "contact" },
   ];
 
   return (
@@ -55,14 +55,16 @@ const Navigation = () => {
             {/* Logo */}
             <motion.div
               whileHover={{ scale: 1.05 }}
-              className="flex items-center gap-3 cursor-pointer"
+              className="flex items-center gap-3 cursor-pointer relative"
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             >
-              <div className="w-10 h-10 bg-gradient-to-br from-[#43BFC7] to-[#FAA41E] rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(67,191,199,0.4)]">
-                <span className="text-xl font-bold text-[#04143C]">J</span>
-              </div>
+              <img
+                src={avisLogo}
+                alt="Avis Logo"
+                className="absolute -top-10 left-1/2 -translate-x-1/2 w-[180px] h-[180px] object-contain"
+              />
               <span className="text-xl font-bold bg-gradient-to-r from-[#43BFC7] to-[#FAA41E] bg-clip-text text-transparent">
-                Jarvis™
+                Avis™
               </span>
             </motion.div>
 
@@ -92,12 +94,16 @@ const Navigation = () => {
                 Sign In
               </motion.button>
 
+              {/* Book Demo - now opens modal */}
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="px-6 py-2.5 bg-gradient-to-r from-[#FAA41E] to-[#e8941a] rounded-xl text-[#04143C] font-semibold hover:shadow-[0_0_40px_rgba(250,164,30,0.6)] transition-all relative overflow-hidden group"
+                onClick={() => {
+                  window.dispatchEvent(new CustomEvent("open-demo-modal"));
+                }}
               >
-                <span className="relative z-10">Start Free Trial</span>
+                <span className="relative z-10">Book Your Demo</span>
                 <div className="absolute inset-0 bg-gradient-to-r from-[#e8941a] to-[#FAA41E] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </motion.button>
             </div>
@@ -129,7 +135,10 @@ const Navigation = () => {
             exit={{ opacity: 0, height: 0 }}
             className="lg:hidden mt-2 mx-6 overflow-hidden"
           >
-            <div className="glass-surface rounded-2xl p-6 border-2 border-[#43BFC7]/20" style={{ background: "rgba(4, 20, 60, 0.95)" }}>
+            <div
+              className="glass-surface rounded-2xl p-6 border-2 border-[#43BFC7]/20"
+              style={{ background: "rgba(4, 20, 60, 0.95)" }}
+            >
               <div className="flex flex-col gap-4">
                 {navLinks.map((link, i) => (
                   <motion.button
@@ -143,7 +152,9 @@ const Navigation = () => {
                     {link.name}
                   </motion.button>
                 ))}
+
                 <div className="h-px bg-border my-2" />
+
                 <motion.button
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -153,13 +164,19 @@ const Navigation = () => {
                 >
                   Sign In
                 </motion.button>
+
+                {/* Mobile Book Demo - opens same modal */}
                 <motion.button
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.5 }}
                   className="py-3 px-4 bg-gradient-to-r from-[#FAA41E] to-[#e8941a] rounded-lg text-[#04143C] font-semibold hover:shadow-[0_0_40px_rgba(250,164,30,0.6)] transition-all"
+                  onClick={() => {
+                    window.dispatchEvent(new CustomEvent("open-demo-modal"));
+                    setIsMobileMenuOpen(false);
+                  }}
                 >
-                  Start Free Trial
+                  Book Your Demo
                 </motion.button>
               </div>
             </div>

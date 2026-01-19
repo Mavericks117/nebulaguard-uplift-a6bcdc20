@@ -3,15 +3,15 @@ import { FiAlertTriangle, FiCheckCircle } from "react-icons/fi";
 
 const ProblemSolution = () => {
   const alerts = [
-    "CRITICAL: Disk space 95% on db-prod-01",
-    "WARNING: High CPU usage on web-server-03",
-    "ALERT: Memory leak detected app-node-07",
-    "CRITICAL: Network timeout cluster-05",
-    "WARNING: SSL certificate expires in 2 days",
-    "ALERT: Database connection pool exhausted",
-    "CRITICAL: Redis maxmemory reached",
-    "WARNING: Kafka lag increasing partition-12"
-  ];
+  "CRITICAL: Disk almost full (95%) on database server db-prod-01 – clean up now!",
+  "WARNING: CPU spiking high on web server web-03 – check running processes",
+  "ALERT: Memory leak found in app on node-07 – restart might be needed",
+  "CRITICAL: Network connection lost to cluster-05 – urgent check required",
+  "WARNING: SSL certificate for site expires in 2 days – renew soon",
+  "ALERT: Database connections maxed out – add more or optimize queries",
+  "CRITICAL: Redis memory limit hit – scale up or clear cache",
+  "WARNING: Kafka message backlog growing on partition-12 – investigate delay"
+];
 
   return (
     <section className="relative py-32 overflow-hidden">
@@ -40,7 +40,7 @@ const ProblemSolution = () => {
             <div className="relative">
               <div className="flex items-center gap-2 mb-4 text-[#FAA41E]">
                 <FiAlertTriangle className="w-6 h-6" />
-                <span className="font-bold">Legacy Zabbix</span>
+                <span className="font-bold">System Health Alerts</span>
               </div>
               
               <div className="space-y-2 max-h-96 overflow-hidden">
@@ -58,7 +58,7 @@ const ProblemSolution = () => {
               </div>
               
               <div className="mt-4 text-center">
-                <span className="text-3xl font-bold text-[#FAA41E]">500+</span>
+                <span className="text-3xl font-bold text-[#FAA41E]">Many</span>
                 <p className="text-muted-foreground">alerts/day</p>
               </div>
             </div>
@@ -89,7 +89,7 @@ const ProblemSolution = () => {
             </div>
           </motion.div>
 
-          {/* Peaceful Jarvis side */}
+          {/* Peaceful Avis side */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -101,7 +101,7 @@ const ProblemSolution = () => {
             <div className="relative">
               <div className="flex items-center gap-2 mb-4 text-[#39ff14]">
                 <FiCheckCircle className="w-6 h-6" />
-                <span className="font-bold">Jarvis AI</span>
+                <span className="font-bold">Avis AI</span>
               </div>
               
               <div className="space-y-4">
@@ -153,11 +153,11 @@ const ProblemSolution = () => {
           className="text-center mt-16"
         >
           <p className="text-3xl font-bold">
-            <span className="text-[#FAA41E]">From 500 alerts/day</span>
+            <span className="text-[#FAA41E]">From Many alerts/day</span>
             <span className="text-foreground"> → </span>
-            <span className="text-[#39ff14]">8 insights/day</span>
+            <span className="text-[#39ff14]">Reduced noise from alerts</span>
           </p>
-          <p className="text-xl text-muted-foreground mt-2">90% less noise</p>
+          <p className="text-xl text-muted-foreground mt-2">Reduced alert fatigue</p>
         </motion.div>
       </div>
     </section>

@@ -5,59 +5,38 @@ import { useRef } from "react";
 const features = [
   {
     icon: FiCpu,
-    title: "AI Root Cause Analysis",
-    subtitle: "<1s",
-    description: "Neural networks analyze patterns across 10M+ data points to pinpoint the exact cause instantly",
+    title: "AI-Powered Cause Detection",
+    subtitle: "Faster Insights & Fixes",
+    description: "Let AI find the root cause in seconds instead of hours of searching",
     gradient: "from-[#43BFC7] to-[#FAA41E]"
   },
   {
     icon: FiZap,
-    title: "Real-Time Event Streaming",
-    subtitle: "WebSocket Powered",
-    description: "Sub-millisecond updates with Redis Streams. Zero polling, infinite scale",
+    title: "Near Real-Time Alerts & Events",
+    subtitle: "Fast, Reliable Updates",
+    description: "Alerts are detected and delivered within minutes, giving you timely visibility without manual checks",
     gradient: "from-[#FAA41E] to-[#43BFC7]"
   },
   {
     icon: FiTarget,
-    title: "Smart Traps Intelligence",
-    subtitle: "Auto-Classify",
-    description: "AI categorizes and prioritizes SNMP traps. Reduces false positives by 94%",
-    gradient: "from-[#43BFC7] to-[#39ff14]"
-  },
-  {
-    icon: FiShield,
-    title: "One-Click Auto-Remediation",
-    subtitle: "Self-Healing",
-    description: "AI executes fixes autonomously. Approve once, trust forever with rollback protection",
-    gradient: "from-[#39ff14] to-[#43BFC7]"
-  },
-  {
-    icon: FiUsers,
-    title: "Enterprise RBAC",
-    subtitle: "Multi-Tenant",
-    description: "Granular permissions, SSO integration, audit logs. Built for Fortune 500 compliance",
+    title: "Intelligent Alert Prioritization",
+    subtitle: "Smart Filtering",
+    description: "AI groups related alerts, reduces noise, and helps focus on what matters most",
     gradient: "from-[#43BFC7] to-[#FAA41E]"
   },
   {
-    icon: FiPackage,
-    title: "White-Label Ready",
-    subtitle: "Reseller Program",
-    description: "Custom domains, branding, billing. Launch your own monitoring SaaS in 48 hours",
+    icon: FiShield,
+    title: "Guided Remediation",
+    subtitle: "Action Recommendations",
+    description: "Clear, step-by-step suggestions to resolve common issues quickly and safely",
     gradient: "from-[#FAA41E] to-[#43BFC7]"
   },
   {
-    icon: FiWifi,
-    title: "Offline PWA Mode",
-    subtitle: "Works Anywhere",
-    description: "Access dashboards without internet. Data syncs when you reconnect",
-    gradient: "from-[#43BFC7] to-[#39ff14]"
-  },
-  {
-    icon: FiMoreHorizontal,
-    title: "And 47 More Features",
-    subtitle: "Enterprise Suite",
-    description: "Explore our complete feature set including custom integrations and API access",
-    gradient: "from-[#39ff14] to-[#43BFC7]"
+    icon: FiUsers,
+    title: "Enterprise-Grade Access Control",
+    subtitle: "RBAC",
+    description: "Granular role-based permissions, Multi-team & multi-tenant organization",
+    gradient: "from-[#43BFC7] to-[#FAA41E]"
   }
 ];
 

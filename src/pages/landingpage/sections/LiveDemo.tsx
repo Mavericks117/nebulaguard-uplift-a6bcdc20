@@ -3,7 +3,7 @@ import { FiActivity, FiTrendingUp, FiCheckCircle, FiAlertCircle } from "react-ic
 import { useState, useEffect } from "react";
 
 const LiveDemo = () => {
-  const [activeHosts, setActiveHosts] = useState(1847);
+  const [activeHosts, setActiveHosts] = useState(127);
   const [alerts, setAlerts] = useState(3);
 
   useEffect(() => {
@@ -49,7 +49,7 @@ const LiveDemo = () => {
         >
           <h2 className="text-5xl md:text-6xl font-bold mb-4">
             <span className="bg-gradient-to-r from-[#43BFC7] to-[#FAA41E] bg-clip-text text-transparent">
-              See Jarvis in Action
+              See Sentramind Avis in Action
             </span>
           </h2>
           <p className="text-xl text-muted-foreground">No Signup Needed</p>
@@ -157,7 +157,7 @@ const LiveDemo = () => {
               className="mt-8 text-center p-4 bg-[#39ff14]/10 rounded-xl border border-[#39ff14]/30"
             >
               <p className="text-[#39ff14] font-semibold">
-                💡 This AI insight saved Binance $340k last quarter
+                Avis enables quicker identification of issues and also Reduces noise / alert fatigue.
               </p>
             </motion.div>
           </div>

@@ -15,9 +15,6 @@ import Navigation from "./components/Navigation";
 import SmoothScroll from "./components/SmoothScroll";
 import SchemaMetadata from "./components/SchemaMetadata";
 
-// Lazy load heavy components
-const ExitIntentPopup = lazy(() => import("./components/ExitIntentPopup"));
-
 const LandingPage = () => {
   return (
     <HelmetProvider>
@@ -47,18 +44,13 @@ const LandingPage = () => {
               <LiveDemo />
             </div>
             <AIShowcase />
-            <Technology />
             <Pricing />
-            <FinalCTA />
             <div id="contact">
               <Footer />
             </div>
           </main>
 
-          {/* Exit Intent Popup */}
-          <Suspense fallback={null}>
-            <ExitIntentPopup />
-          </Suspense>
+          
         </div>
       </SmoothScroll>
     </HelmetProvider>
