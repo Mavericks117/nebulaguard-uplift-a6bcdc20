@@ -55,15 +55,15 @@ const Navigation = () => {
             {/* Logo */}
             <motion.div
               whileHover={{ scale: 1.05 }}
-              className="flex items-center gap-3 cursor-pointer"
+              className="flex items-center gap-4 cursor-pointer"
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             >
               <img
                 src={avisLogo}
                 alt="Avis Logo"
-                className="w-10 h-10 object-contain"
+                className="w-14 h-14 md:w-16 md:h-16 object-contain drop-shadow-[0_0_8px_rgba(67,191,199,0.4)]"
               />
-              <span className="text-xl font-bold bg-gradient-to-r from-[#43BFC7] to-[#FAA41E] bg-clip-text text-transparent">
+              <span className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-[#43BFC7] to-[#FAA41E] bg-clip-text text-transparent">
                 Avis™
               </span>
             </motion.div>
