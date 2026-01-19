@@ -18,8 +18,8 @@ const Hosts = () => {
     name: host.hostname,
     ip: host.ip || "—",
     status: "healthy",
-    cpu: host.metrics?.cpu_percent ?? 0,
-    memory: host.metrics?.memory_percent ?? 0,
+    cpu: host.cpu_usage ?? 0,
+    memory: host.memory_usage ?? 0,
     uptime: host.uptime_days,
     group: host.hostgroup,
   }));
