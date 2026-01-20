@@ -1,6 +1,5 @@
-import { getAuthUser } from '@/utils/auth';
+import { useKeycloakAuth } from '@/auth/useKeycloakAuth';
 import { hasPermission } from '@/utils/rbac';
-import { useEffect, useState } from 'react';
 
 interface PermissionGateProps {
   children: React.ReactNode;
@@ -8,24 +7,24 @@ interface PermissionGateProps {
   fallback?: React.ReactNode;
 }
 
+/**
+ * Permission-based rendering gate using Keycloak authentication
+ * Only renders children if the user has the required permission
+ */
 const PermissionGate = ({ children, permission, fallback = null }: PermissionGateProps) => {
-  const [hasAccess, setHasAccess] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const { user, isLoading, isAuthenticated } = useKeycloakAuth();
 
-  useEffect(() => {
-    getAuthUser().then((user) => {
-      if (user && hasPermission(user.role, permission)) {
-        setHasAccess(true);
-      }
-      setLoading(false);
-    });
-  }, [permission]);
-
-  if (loading) {
+  // Show nothing while loading
+  if (isLoading) {
     return null;
   }
-  
-  if (!hasAccess) {
+
+  // Check if user is authenticated and has the required permission
+  if (!isAuthenticated || !user) {
+    return <>{fallback}</>;
+  }
+
+  if (!hasPermission(user.role, permission)) {
     return <>{fallback}</>;
   }
   

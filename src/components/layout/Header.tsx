@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { Bell, Search, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,20 +10,14 @@ import {
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 import ThemeToggle from "@/components/ThemeToggle";
-import { signOut, getAuthUser, AuthUser } from "@/utils/auth";
-import { useNavigate } from "react-router-dom";
+import { useKeycloakAuth } from "@/auth/useKeycloakAuth";
 
 const Header = () => {
-  const navigate = useNavigate();
-  const [user, setUser] = useState<AuthUser | null>(null);
+  const { user, logout, isAuthenticated } = useKeycloakAuth();
 
-  useEffect(() => {
-    getAuthUser().then(setUser);
-  }, []);
-
-  const handleLogout = async () => {
-    await signOut();
-    navigate("/login");
+  const handleLogout = () => {
+    console.log('[Header] Logging out user:', user?.email);
+    logout();
   };
 
   return (
@@ -52,29 +45,41 @@ const Header = () => {
           </Button>
 
           {/* User Menu */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface/50 border border-border/50 hover:border-primary/50 transition-colors cursor-pointer">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-                  <User className="w-4 h-4 text-background" />
-                </div>
-                <div className="text-sm">
-                  <div className="font-medium">{user?.email || "User"}</div>
-                  <div className="text-xs text-muted-foreground capitalize">
-                    {user?.role?.replace("_", " ") || "User"}
+          {isAuthenticated && user && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface/50 border border-border/50 hover:border-primary/50 transition-colors cursor-pointer">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+                    <User className="w-4 h-4 text-background" />
+                  </div>
+                  <div className="text-sm">
+                    <div className="font-medium">{user.name || user.email}</div>
+                    <div className="text-xs text-muted-foreground capitalize">
+                      {user.role?.replace("_", " ") || "User"}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout} className="text-destructive">
-                <LogOut className="w-4 h-4 mr-2" />
-                Logout
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium">{user.name || user.email}</p>
+                    <p className="text-xs text-muted-foreground">{user.email}</p>
+                    {user.organizationId && (
+                      <p className="text-xs text-muted-foreground">
+                        Org: {user.organizationId}
+                      </p>
+                    )}
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout} className="text-destructive cursor-pointer">
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Sign out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
       </div>
     </header>

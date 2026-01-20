@@ -1,52 +1,48 @@
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
-import { Shield, Zap, Lock, Mail } from "lucide-react";
-import { toast } from "sonner";
-import { signIn, getAuthUser } from "@/utils/auth";
+import { Shield, Zap, LogIn } from "lucide-react";
+import { useKeycloakAuth } from "@/auth/useKeycloakAuth";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const { isAuthenticated, isLoading, user, login } = useKeycloakAuth();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!email || !password) {
-      toast.error("Please enter email and password");
-      return;
+  // If already authenticated, redirect to appropriate dashboard
+  useEffect(() => {
+    if (!isLoading && isAuthenticated && user) {
+      console.log('[Login] Already authenticated, redirecting based on role:', user.role);
+      
+      switch (user.role) {
+        case 'super_admin':
+          navigate('/super-admin', { replace: true });
+          break;
+        case 'org_admin':
+          navigate('/admin', { replace: true });
+          break;
+        default:
+          navigate('/dashboard', { replace: true });
+      }
     }
+  }, [isLoading, isAuthenticated, user, navigate]);
 
-    setLoading(true);
-
-    const { error } = await signIn(email, password);
-    
-    if (error) {
-      toast.error(error.message || "Login failed");
-      setLoading(false);
-      return;
-    }
-
-    toast.success("Login successful!");
-    
-    // Get user role and navigate accordingly
-    const user = await getAuthUser();
-    
-    if (user?.role === 'super_admin') {
-      navigate('/super-admin');
-    } else if (user?.role === 'org_admin') {
-      navigate('/admin');
-    } else {
-      navigate('/dashboard');
-    }
-    
-    setLoading(false);
+  const handleLogin = () => {
+    console.log('[Login] Initiating Keycloak login');
+    login();
   };
+
+  // Show loading while checking auth status
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
+          <p className="text-muted-foreground">Checking authentication...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden bg-background">
@@ -80,63 +76,25 @@ const Login = () => {
 
         {/* Login Card */}
         <Card className="glass-card border-border/50 p-8">
-          <form onSubmit={handleLogin} className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-foreground">Email</Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="admin@jarvis.ai"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 bg-surface/50 border-border/50 focus:border-primary transition-colors"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="password" className="text-foreground">Password</Label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 bg-surface/50 border-border/50 focus:border-primary transition-colors"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between text-sm">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" className="rounded border-border bg-surface/50" />
-                <span className="text-muted-foreground">Remember me</span>
-              </label>
-              <Link to="/forgot-password" className="text-primary hover:text-primary/80 transition-colors">
-                Forgot password?
-              </Link>
+          <div className="text-center space-y-6">
+            <div>
+              <h2 className="text-2xl font-semibold text-foreground mb-2">Welcome Back</h2>
+              <p className="text-muted-foreground">
+                Sign in with your organization credentials to access the monitoring dashboard.
+              </p>
             </div>
 
             <Button
-              type="submit"
-              disabled={loading}
+              onClick={handleLogin}
               className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90 text-background font-semibold py-6 rounded-xl glow-primary transition-all"
             >
-              {loading ? "Authenticating..." : "Sign In"}
+              <LogIn className="w-5 h-5 mr-2" />
+              Sign In with SSO
             </Button>
-          </form>
 
-          <div className="mt-6 text-center text-sm text-muted-foreground">
-            Don't have an account?{" "}
-            <Link to="/signup" className="text-primary hover:text-primary/80 transition-colors font-medium">
-              Sign up
-            </Link>
+            <p className="text-xs text-muted-foreground">
+              You will be redirected to your organization's identity provider for secure authentication.
+            </p>
           </div>
         </Card>
 
