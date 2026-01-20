@@ -12,6 +12,14 @@ const keycloak = new Keycloak(keycloakConfig);
 
 export default keycloak;
 
+// Centralized redirect URI - MUST be used in ALL login() calls
+// This ensures the redirect_uri sent to Keycloak always matches the configured Valid Redirect URIs
+export const AUTH_REDIRECT_URI = 
+  import.meta.env.VITE_KEYCLOAK_REDIRECT_URI || `${window.location.origin}/oauth/callback`;
+
+// Logout redirect URI
+export const AUTH_LOGOUT_REDIRECT_URI = window.location.origin + '/';
+
 // Token refresh configuration
 export const REFRESH_TOKEN_MIN_VALIDITY = 60; // seconds before expiry to refresh
 
