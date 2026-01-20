@@ -5,6 +5,7 @@ const keycloakConfig = {
   url: import.meta.env.VITE_KEYCLOAK_URL || 'http://localhost:8080',
   realm: import.meta.env.VITE_KEYCLOAK_REALM || 'Jarvis',
   clientId: import.meta.env.VITE_KEYCLOAK_CLIENT_ID || 'react-frontend',
+  redirectUri: import.meta.env.VITE_KEYCLOAK_REDIRECT_URI || 'http://localhost:8082/oauth/callback'
 };
 
 // Create Keycloak instance
