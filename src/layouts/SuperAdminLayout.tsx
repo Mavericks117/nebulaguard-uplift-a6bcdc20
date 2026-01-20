@@ -13,6 +13,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface SuperAdminLayoutProps {
   children: ReactNode;
@@ -32,11 +43,6 @@ const menuItems = [
 
 const SuperAdminLayout = ({ children }: SuperAdminLayoutProps) => {
   const { user, logout, isAuthenticated } = useKeycloakAuth();
-
-  const handleLogout = () => {
-    console.log('[SuperAdminLayout] Logging out user:', user?.email);
-    logout();
-  };
   
   return (
     <div className="min-h-screen w-full bg-background">
@@ -127,10 +133,28 @@ const SuperAdminLayout = ({ children }: SuperAdminLayoutProps) => {
                       </div>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleLogout} className="text-destructive cursor-pointer">
-                      <LogOut className="w-4 h-4 mr-2" />
-                      Sign out
-                    </DropdownMenuItem>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <DropdownMenuItem className="text-destructive cursor-pointer">
+                          <LogOut className="w-4 h-4 mr-2" />
+                          Sign out
+                        </DropdownMenuItem>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Are you sure you want to logout?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            You will be signed out of your current session.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction onClick={() => logout()}>
+                            Yes
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </DropdownMenuContent>
                 </DropdownMenu>
               )}

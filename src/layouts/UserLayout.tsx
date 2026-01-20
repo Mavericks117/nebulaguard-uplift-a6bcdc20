@@ -13,6 +13,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface UserLayoutProps {
   children: ReactNode;
@@ -30,11 +41,6 @@ const menuItems = [
 
 const UserLayout = ({ children }: UserLayoutProps) => {
   const { user, logout, isAuthenticated } = useKeycloakAuth();
-
-  const handleLogout = () => {
-    console.log('[UserLayout] Logging out user:', user?.email);
-    logout();
-  };
   
   return (
     <div className="min-h-screen w-full bg-background">
@@ -114,22 +120,40 @@ const UserLayout = ({ children }: UserLayoutProps) => {
                       </div>
                     </div>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56">
-                    <DropdownMenuLabel>
-                      <div className="flex flex-col space-y-1">
-                        <p className="text-sm font-medium">{user.name || user.email}</p>
-                        <p className="text-xs text-muted-foreground">{user.email}</p>
-                        {user.organizationId && (
-                          <p className="text-xs text-muted-foreground">Org: {user.organizationId}</p>
-                        )}
-                      </div>
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleLogout} className="text-destructive cursor-pointer">
-                      <LogOut className="w-4 h-4 mr-2" />
-                      Sign out
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
+                    <DropdownMenuContent align="end" className="w-56">
+                      <DropdownMenuLabel>
+                        <div className="flex flex-col space-y-1">
+                          <p className="text-sm font-medium">{user.name || user.email}</p>
+                          <p className="text-xs text-muted-foreground">{user.email}</p>
+                          {user.organizationId && (
+                            <p className="text-xs text-muted-foreground">Org: {user.organizationId}</p>
+                          )}
+                        </div>
+                      </DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <DropdownMenuItem className="text-destructive cursor-pointer">
+                            <LogOut className="w-4 h-4 mr-2" />
+                            Sign out
+                          </DropdownMenuItem>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Are you sure you want to logout?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              You will be signed out of your current session.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={() => logout()}>
+                              Yes
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </DropdownMenuContent>
                 </DropdownMenu>
               )}
             </div>

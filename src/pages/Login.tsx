@@ -1,48 +1,33 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Shield, Zap, LogIn } from "lucide-react";
-import { useKeycloakAuth } from "@/auth/useKeycloakAuth";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useKeycloakAuth } from "@/auth";
 
 const Login = () => {
   const navigate = useNavigate();
   const { isAuthenticated, isLoading, user, login } = useKeycloakAuth();
 
-  // If already authenticated, redirect to appropriate dashboard
+  // If already authenticated, redirect to appropriate dashboard based on role
   useEffect(() => {
     if (!isLoading && isAuthenticated && user) {
-      console.log('[Login] Already authenticated, redirecting based on role:', user.role);
-      
       switch (user.role) {
-        case 'super_admin':
-          navigate('/super-admin', { replace: true });
+        case "super_admin":
+          navigate("/super-admin", { replace: true });
           break;
-        case 'org_admin':
-          navigate('/admin', { replace: true });
+        case "org_admin":
+          navigate("/admin", { replace: true });
           break;
         default:
-          navigate('/dashboard', { replace: true });
+          navigate("/dashboard", { replace: true });
       }
     }
   }, [isLoading, isAuthenticated, user, navigate]);
 
   const handleLogin = () => {
-    console.log('[Login] Initiating Keycloak login');
     login();
   };
-
-  // Show loading while checking auth status
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
-          <p className="text-muted-foreground">Checking authentication...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden bg-background">
