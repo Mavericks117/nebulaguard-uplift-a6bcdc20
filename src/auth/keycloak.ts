@@ -16,9 +16,13 @@ export default keycloak;
 export const REFRESH_TOKEN_MIN_VALIDITY = 60; // seconds before expiry to refresh
 
 // Keycloak initialization options for PKCE flow
+// Note: silentCheckSsoRedirectUri is disabled because Keycloak's default CSP
+// blocks iframe embedding. To enable silent SSO, configure Keycloak's
+// "Content-Security-Policy" header to include your app's origin in frame-ancestors.
 export const keycloakInitOptions = {
   onLoad: 'check-sso' as const,
   pkceMethod: 'S256' as const,
   checkLoginIframe: false,
-  silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
+  // Silent SSO disabled - requires Keycloak CSP configuration to allow framing
+  // silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
 };
