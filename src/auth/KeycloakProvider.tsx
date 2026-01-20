@@ -1,5 +1,5 @@
 import { ReactKeycloakProvider } from '@react-keycloak/web';
-import keycloak, { keycloakInitOptions, REFRESH_TOKEN_MIN_VALIDITY } from './keycloak';
+import keycloak, { keycloakInitOptions, REFRESH_TOKEN_MIN_VALIDITY, AUTH_REDIRECT_URI } from './keycloak';
 import { ReactNode, useCallback } from 'react';
 import type { AuthClientEvent, AuthClientError } from '@react-keycloak/core';
 
@@ -34,13 +34,13 @@ const KeycloakProvider = ({ children }: KeycloakProviderProps) => {
         break;
       case 'onAuthRefreshError':
         console.error('[Keycloak] Token refresh failed - redirecting to login');
-        keycloak.login();
+        keycloak.login({ redirectUri: AUTH_REDIRECT_URI });
         break;
       case 'onTokenExpired':
         console.log('[Keycloak] Token expired - attempting refresh');
         keycloak.updateToken(REFRESH_TOKEN_MIN_VALIDITY).catch(() => {
           console.error('[Keycloak] Failed to refresh token - redirecting to login');
-          keycloak.login();
+          keycloak.login({ redirectUri: AUTH_REDIRECT_URI });
         });
         break;
       case 'onAuthLogout':

@@ -1,6 +1,7 @@
 import { useKeycloak } from '@react-keycloak/web';
 import { useCallback, useMemo } from 'react';
 import { UserRole } from '@/utils/auth';
+import { AUTH_REDIRECT_URI, AUTH_LOGOUT_REDIRECT_URI } from './keycloak';
 
 export interface KeycloakUser {
   id: string;
@@ -78,9 +79,11 @@ export const useKeycloakAuth = (): UseKeycloakAuthReturn => {
   }, [keycloak.authenticated, keycloak.tokenParsed]);
 
   // Login function - redirects to Keycloak login page
+  // ALWAYS uses AUTH_REDIRECT_URI to ensure consistency with Keycloak's Valid Redirect URIs
   const login = useCallback(() => {
+    console.log('[Keycloak] Initiating login with redirectUri:', AUTH_REDIRECT_URI);
     keycloak.login({
-      redirectUri: window.location.origin + '/oauth/callback',
+      redirectUri: AUTH_REDIRECT_URI,
     });
   }, [keycloak]);
 
@@ -88,7 +91,7 @@ export const useKeycloakAuth = (): UseKeycloakAuthReturn => {
   const logout = useCallback(() => {
     sessionStorage.removeItem('kc_token');
     keycloak.logout({
-      redirectUri: window.location.origin + '/',
+      redirectUri: AUTH_LOGOUT_REDIRECT_URI,
     });
   }, [keycloak]);
 
