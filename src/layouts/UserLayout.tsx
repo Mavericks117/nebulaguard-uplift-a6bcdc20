@@ -1,10 +1,18 @@
-import { ReactNode, useState, useEffect } from "react";
-import { Bell, Search, User, LayoutDashboard, Server, AlertTriangle, Radio, Lightbulb, FileText, Settings, Shield, Zap } from "lucide-react";
+import { ReactNode } from "react";
+import { Bell, Search, User, LayoutDashboard, Server, AlertTriangle, Radio, Lightbulb, FileText, Settings, Shield, Zap, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { NavLink } from "@/components/NavLink";
 import ThemeToggle from "@/components/ThemeToggle";
-import { getAuthUser, AuthUser } from "@/utils/auth";
+import { useKeycloakAuth } from "@/auth/useKeycloakAuth";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
+} from "@/components/ui/dropdown-menu";
 
 interface UserLayoutProps {
   children: ReactNode;
@@ -21,11 +29,12 @@ const menuItems = [
 ];
 
 const UserLayout = ({ children }: UserLayoutProps) => {
-  const [user, setUser] = useState<AuthUser | null>(null);
+  const { user, logout, isAuthenticated } = useKeycloakAuth();
 
-  useEffect(() => {
-    getAuthUser().then(setUser);
-  }, []);
+  const handleLogout = () => {
+    console.log('[UserLayout] Logging out user:', user?.email);
+    logout();
+  };
   
   return (
     <div className="min-h-screen w-full bg-background">
@@ -92,15 +101,37 @@ const UserLayout = ({ children }: UserLayoutProps) => {
                 <span className="absolute top-2 right-2 w-2 h-2 bg-accent rounded-full animate-pulse-glow" />
               </Button>
 
-              <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface/50 border border-border/50 hover:border-primary/50 transition-colors cursor-pointer">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-                  <User className="w-4 h-4 text-background" />
-                </div>
-                <div className="text-sm">
-                  <div className="font-medium">{user?.email || 'User'}</div>
-                  <div className="text-xs text-muted-foreground capitalize">{user?.role || 'User'}</div>
-                </div>
-              </div>
+              {isAuthenticated && user && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface/50 border border-border/50 hover:border-primary/50 transition-colors cursor-pointer">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+                        <User className="w-4 h-4 text-background" />
+                      </div>
+                      <div className="text-sm">
+                        <div className="font-medium">{user.name || user.email}</div>
+                        <div className="text-xs text-muted-foreground capitalize">{user.role?.replace("_", " ") || 'User'}</div>
+                      </div>
+                    </div>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel>
+                      <div className="flex flex-col space-y-1">
+                        <p className="text-sm font-medium">{user.name || user.email}</p>
+                        <p className="text-xs text-muted-foreground">{user.email}</p>
+                        {user.organizationId && (
+                          <p className="text-xs text-muted-foreground">Org: {user.organizationId}</p>
+                        )}
+                      </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleLogout} className="text-destructive cursor-pointer">
+                      <LogOut className="w-4 h-4 mr-2" />
+                      Sign out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
             </div>
           </div>
         </header>
