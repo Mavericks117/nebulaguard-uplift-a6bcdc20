@@ -135,7 +135,7 @@ const OrgAdminLayout = ({ children }: OrgAdminLayoutProps) => {
                     <DropdownMenuSeparator />
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
-                        <DropdownMenuItem className="text-destructive cursor-pointer">
+                        <DropdownMenuItem className="text-destructive cursor-pointer" onSelect={(e) => e.preventDefault()}>
                           <LogOut className="w-4 h-4 mr-2" />
                           Sign out
                         </DropdownMenuItem>

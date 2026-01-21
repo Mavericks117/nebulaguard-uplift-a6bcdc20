@@ -3,15 +3,84 @@ import { FiActivity, FiTrendingUp, FiCheckCircle, FiAlertCircle } from "react-ic
 import { useState, useEffect } from "react";
 
 const LiveDemo = () => {
-  const [activeHosts, setActiveHosts] = useState(127);
-  const [alerts, setAlerts] = useState(3);
+  const dataSets = [
+    {
+      activeHosts: 127,
+      alerts: 3,
+      systemHealth: "98.7%",
+      avgResponse: "142ms",
+      cpuUsage: "34%",
+      predictions: 12,
+      insights: [
+        { text: "Predicted disk failure on db-prod-03 in 11 days", color: "FAA41E", time: "2s ago" },
+        { text: "Auto-scaled cluster-07 to handle traffic spike", color: "39ff14", time: "8s ago" },
+        { text: "Root cause identified: Memory leak in app-node-12", color: "43BFC7", time: "15s ago" },
+      ],
+    },
+    {
+      activeHosts: 132,
+      alerts: 2,
+      systemHealth: "97.5%",
+      avgResponse: "158ms",
+      cpuUsage: "28%",
+      predictions: 15,
+      insights: [
+        { text: "Anomaly detected in network traffic patterns", color: "FAA41E", time: "3s ago" },
+        { text: "Optimized resource allocation for web-server-05", color: "39ff14", time: "10s ago" },
+        { text: "Potential bottleneck in API endpoint resolved", color: "43BFC7", time: "18s ago" },
+      ],
+    },
+    {
+      activeHosts: 129,
+      alerts: 4,
+      systemHealth: "99.2%",
+      avgResponse: "135ms",
+      cpuUsage: "41%",
+      predictions: 10,
+      insights: [
+        { text: "High load warning on cache-layer-02", color: "FAA41E", time: "1s ago" },
+        { text: "Successfully mitigated DDoS attempt", color: "39ff14", time: "7s ago" },
+        { text: "Firmware update recommended for router-14", color: "43BFC7", time: "14s ago" },
+      ],
+    },
+    {
+      activeHosts: 135,
+      alerts: 1,
+      systemHealth: "96.8%",
+      avgResponse: "149ms",
+      cpuUsage: "37%",
+      predictions: 18,
+      insights: [
+        { text: "Storage capacity nearing limit on backup-09", color: "FAA41E", time: "4s ago" },
+        { text: "Performance boost applied to database queries", color: "39ff14", time: "12s ago" },
+        { text: "Configuration drift detected and corrected", color: "43BFC7", time: "20s ago" },
+      ],
+    },
+    {
+      activeHosts: 130,
+      alerts: 5,
+      systemHealth: "98.3%",
+      avgResponse: "140ms",
+      cpuUsage: "32%",
+      predictions: 14,
+      insights: [
+        { text: "Unusual login activity from unknown IP", color: "FAA41E", time: "5s ago" },
+        { text: "Cluster-03 balanced for optimal throughput", color: "39ff14", time: "9s ago" },
+        { text: "Predictive maintenance scheduled for server-08", color: "43BFC7", time: "16s ago" },
+      ],
+    },
+  ];
+
+  const [currentData, setCurrentData] = useState(dataSets[0]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setActiveHosts(prev => prev + Math.floor(Math.random() * 3));
-      setAlerts(Math.floor(Math.random() * 5));
-    }, 3000);
-
+      setCurrentData((prev) => {
+        const currentIndex = dataSets.indexOf(prev);
+        const nextIndex = (currentIndex + 1) % dataSets.length;
+        return dataSets[nextIndex];
+      });
+    }, 7000); // Cycle every 5 seconds for a live feel
     return () => clearInterval(interval);
   }, []);
 
@@ -39,7 +108,6 @@ const LiveDemo = () => {
           />
         ))}
       </div>
-
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -54,7 +122,6 @@ const LiveDemo = () => {
           </h2>
           <p className="text-xl text-muted-foreground">No Signup Needed</p>
         </motion.div>
-
         {/* Demo dashboard */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
@@ -64,7 +131,6 @@ const LiveDemo = () => {
         >
           {/* Neon glow */}
           <div className="absolute inset-0 bg-gradient-to-br from-[#43BFC7]/10 via-transparent to-[#FAA41E]/10" />
-
           <div className="relative z-10">
             {/* Header */}
             <div className="flex justify-between items-center mb-8 pb-6 border-b border-border/50">
@@ -74,16 +140,15 @@ const LiveDemo = () => {
               </div>
               <div className="flex gap-4">
                 <div className="text-right">
-                  <p className="text-3xl font-bold text-[#39ff14]">{activeHosts}</p>
+                  <p className="text-3xl font-bold text-[#39ff14]">{currentData.activeHosts}</p>
                   <p className="text-sm text-muted-foreground">Active Hosts</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-3xl font-bold text-[#FAA41E]">{alerts}</p>
+                  <p className="text-3xl font-bold text-[#FAA41E]">{currentData.alerts}</p>
                   <p className="text-sm text-muted-foreground">Active Alerts</p>
                 </div>
               </div>
             </div>
-
             {/* Grid of stats */}
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
               <motion.div
@@ -93,9 +158,8 @@ const LiveDemo = () => {
               >
                 <FiCheckCircle className="w-8 h-8 text-[#39ff14] mb-3" />
                 <p className="text-sm text-muted-foreground mb-1">System Health</p>
-                <p className="text-3xl font-bold text-[#39ff14]">98.7%</p>
+                <p className="text-3xl font-bold text-[#39ff14]">{currentData.systemHealth}</p>
               </motion.div>
-
               <motion.div
                 animate={{ scale: [1, 1.02, 1] }}
                 transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
@@ -103,9 +167,8 @@ const LiveDemo = () => {
               >
                 <FiActivity className="w-8 h-8 text-[#43BFC7] mb-3" />
                 <p className="text-sm text-muted-foreground mb-1">Avg Response</p>
-                <p className="text-3xl font-bold text-[#43BFC7]">142ms</p>
+                <p className="text-3xl font-bold text-[#43BFC7]">{currentData.avgResponse}</p>
               </motion.div>
-
               <motion.div
                 animate={{ scale: [1, 1.02, 1] }}
                 transition={{ duration: 2, repeat: Infinity, delay: 1 }}
@@ -113,9 +176,8 @@ const LiveDemo = () => {
               >
                 <FiTrendingUp className="w-8 h-8 text-[#FAA41E] mb-3" />
                 <p className="text-sm text-muted-foreground mb-1">CPU Usage</p>
-                <p className="text-3xl font-bold text-[#FAA41E]">34%</p>
+                <p className="text-3xl font-bold text-[#FAA41E]">{currentData.cpuUsage}</p>
               </motion.div>
-
               <motion.div
                 animate={{ scale: [1, 1.02, 1] }}
                 transition={{ duration: 2, repeat: Infinity, delay: 1.5 }}
@@ -123,19 +185,14 @@ const LiveDemo = () => {
               >
                 <FiAlertCircle className="w-8 h-8 text-[#43BFC7] mb-3" />
                 <p className="text-sm text-muted-foreground mb-1">Predictions</p>
-                <p className="text-3xl font-bold text-[#43BFC7]">12</p>
+                <p className="text-3xl font-bold text-[#43BFC7]">{currentData.predictions}</p>
               </motion.div>
             </div>
-
             {/* Live activity feed */}
             <div className="space-y-3">
               <h4 className="text-lg font-semibold text-foreground mb-4">Recent AI Insights</h4>
-              
-              {[
-                { text: "Predicted disk failure on db-prod-03 in 11 days", color: "FAA41E", time: "2s ago" },
-                { text: "Auto-scaled cluster-07 to handle traffic spike", color: "39ff14", time: "8s ago" },
-                { text: "Root cause identified: Memory leak in app-node-12", color: "43BFC7", time: "15s ago" },
-              ].map((insight, i) => (
+             
+              {currentData.insights.map((insight, i) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, x: -20 }}
@@ -148,7 +205,6 @@ const LiveDemo = () => {
                 </motion.div>
               ))}
             </div>
-
             {/* Tooltip */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}

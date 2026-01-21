@@ -48,6 +48,8 @@ import AIMLPerformance from "./pages/super-admin/AIMLPerformance";
 import FeatureFlagsPage from "./pages/super-admin/FeatureFlagsPage";
 import ResellerPortal from "./pages/super-admin/ResellerPortal";
 import Wireframe from "./pages/Wireframe";
+import PrivacyPolicy from './pages/legal/PrivacyPolicy'; 
+import TermsOfUse from './pages/legal/TermsOfUse';
 
 const queryClient = new QueryClient();
 
@@ -62,6 +64,8 @@ const App = () => (
             <Routes>
               {/* Public Routes */}
               <Route path="/" element={<LandingPage />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/terms-of-use" element={<TermsOfUse />} />
               <Route path="/login" element={<Login />} />
               <Route path="/oauth/callback" element={<OAuthCallback />} />
               <Route path="/wireframe" element={<Wireframe />} />
