@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Bell, Search, User, LayoutDashboard, Server, AlertTriangle, Radio, Lightbulb, FileText, Settings, Shield, Zap, LogOut } from "lucide-react";
+import { Bell, Search, User, LayoutDashboard, Server, AlertTriangle, Radio, Lightbulb, FileText, Settings, Shield, Zap, LogOut, HardDrive } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { NavLink } from "@/components/NavLink";
@@ -36,6 +36,7 @@ const menuItems = [
   { icon: Radio, label: "Traps", path: "/dashboard/traps" },
   { icon: Lightbulb, label: "Insights", path: "/dashboard/insights" },
   { icon: FileText, label: "Reports", path: "/dashboard/reports" },
+  { icon: HardDrive, label: "Backup & Replication", path: "/dashboard/backup-replication" },
   { icon: Settings, label: "Settings", path: "/dashboard/settings" },
 ];
 
