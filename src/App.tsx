@@ -26,6 +26,7 @@ import UserTraps from "./pages/user/UserTraps";
 import UserInsights from "./pages/user/UserInsights";
 import UserReports from "./pages/user/UserReports";
 import UserSettings from "./pages/user/UserSettings";
+import BackupReplication from "./pages/user/BackupReplication";
 
 // Org Admin Pages
 import OrgAdminDashboard from "./pages/org-admin/OrgAdminDashboard";
@@ -124,6 +125,14 @@ const App = () => (
                 element={
                   <ProtectedRoute requiredRole="user">
                     <UserReports />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard/backup-replication"
+                element={
+                  <ProtectedRoute requiredRole="user">
+                    <BackupReplication />
                   </ProtectedRoute>
                 }
               />
