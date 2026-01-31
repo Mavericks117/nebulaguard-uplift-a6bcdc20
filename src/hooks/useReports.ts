@@ -76,15 +76,36 @@ export const useReports = (): UseReportsReturn => {
     monthly: reports.filter((r) => r.report_type === "monthly").length,
   }), [reports]);
 
-  const cleanTemplate = (template: string): string => {
-    let cleaned = template.trim();
-    // Remove outer quotes if present (common when stringified twice)
-    if (cleaned.startsWith('"') && cleaned.endsWith('"')) {
-      cleaned = cleaned.slice(1, -1);
+  /**
+   * Normalize double-escaped HTML from the API.
+   * Some reports come with JSON-stringified HTML (double-escaped),
+   * others come as plain HTML. This handles both cases gracefully.
+   */
+  const normalizeHtml = (raw: string): string => {
+    if (!raw || typeof raw !== "string") return "";
+    
+    let normalized = raw.trim();
+    
+    // Attempt JSON.parse to handle double-escaped content
+    // If it fails, the content is already plain HTML
+    try {
+      const parsed = JSON.parse(normalized);
+      if (typeof parsed === "string") {
+        normalized = parsed;
+      }
+    } catch {
+      // Not JSON-encoded, use as-is
     }
-    // Replace double-escaped newlines if any remain
-    cleaned = cleaned.replace(/\\n/g, '\n');
-    return cleaned;
+    
+    // Handle any remaining escaped sequences
+    normalized = normalized
+      .replace(/\\n/g, "\n")
+      .replace(/\\r/g, "\r")
+      .replace(/\\t/g, "\t")
+      .replace(/\\"/g, '"')
+      .replace(/\\\\/g, "\\");
+    
+    return normalized;
   };
 
   const fetchReports = useCallback(
@@ -113,10 +134,10 @@ export const useReports = (): UseReportsReturn => {
             typeof r.created_at === "string"
         );
 
-        // Clean templates
+        // Normalize HTML templates (handle double-escaped content)
         const processedReports = validReports.map((report) => ({
           ...report,
-          report_template: cleanTemplate(report.report_template),
+          report_template: normalizeHtml(report.report_template),
         }));
 
         const newReportsMap = new Map<string, ReportItem>();
@@ -174,9 +195,10 @@ export const useReports = (): UseReportsReturn => {
           typeof r.created_at === "string"
       );
 
+      // Normalize HTML templates (handle double-escaped content)
       const processedReports = validReports.map((report) => ({
         ...report,
-        report_template: cleanTemplate(report.report_template),
+        report_template: normalizeHtml(report.report_template),
       }));
 
       const sortedReports = sortReportsDescending(processedReports);
