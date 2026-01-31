@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import UserLayout from "@/layouts/UserLayout";
 import { FileText, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { format } from "date-fns";
 import useReports, { ReportItem } from "@/hooks/useReports";
 import ReportSummaryCards from "@/components/reports/ReportSummaryCards";
 import ReportsList from "@/components/reports/ReportsList";
@@ -36,19 +37,79 @@ const UserReports = () => {
   const [selectedReport, setSelectedReport] = useState<ReportItem | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  const handleReportClick = (report: ReportItem) => {
+  const handleReportClick = useCallback((report: ReportItem) => {
     setSelectedReport(report);
     setIsDrawerOpen(true);
-  };
+  }, []);
 
-  const handleCloseDrawer = () => {
+  const handleCloseDrawer = useCallback(() => {
     setIsDrawerOpen(false);
     setTimeout(() => setSelectedReport(null), 300);
-  };
+  }, []);
 
-  const handleTypeSelect = (type: string) => {
-    setSelectedType(type);
-  };
+  const handleDownloadPdf = useCallback((report: ReportItem) => {
+    const printWindow = window.open("", "_blank");
+    if (printWindow) {
+      printWindow.document.write(`
+        <!DOCTYPE html>
+        <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <title>Report - ${format(new Date(report.created_at), "PPP")}</title>
+            <style>
+              @page {
+                size: A4 portrait;
+                margin: 1.2cm;
+              }
+              body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                margin: 0;
+                padding: 0;
+                color: #1a1a1a;
+                line-height: 1.6;
+                font-size: 12px;
+              }
+              table { 
+                width: 100%; 
+                border-collapse: collapse;
+                page-break-inside: auto; 
+                margin: 0.5rem 0;
+              }
+              th, td {
+                border: 1px solid #d1d5db;
+                padding: 0.5rem;
+                text-align: left;
+              }
+              th {
+                background: #f3f4f6;
+                font-weight: 600;
+              }
+              tr { 
+                page-break-inside: avoid; 
+                page-break-after: auto; 
+              }
+              img { 
+                max-width: 100%; 
+                height: auto; 
+                page-break-inside: avoid; 
+              }
+              h1, h2, h3 { page-break-after: avoid; }
+              h1 { font-size: 1.5rem; }
+              h2 { font-size: 1.25rem; }
+              h3 { font-size: 1.1rem; }
+            </style>
+          </head>
+          <body>
+            ${report.report_template}
+          </body>
+        </html>
+      `);
+      printWindow.document.close();
+      setTimeout(() => {
+        printWindow.print();
+      }, 800);
+    }
+  }, []);
 
   return (
     <UserLayout>
@@ -57,7 +118,7 @@ const UserReports = () => {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="p-3 rounded-xl bg-primary/10 border border-primary/20">
-              <FileText className="w-6 h-6 text-primary glow-primary" />
+              <FileText className="w-6 h-6 text-primary" />
             </div>
             <div>
               <h1 className="text-3xl font-bold">Reports</h1>
@@ -68,12 +129,8 @@ const UserReports = () => {
           <ReportsConnectionStatus isConnected={isConnected} lastUpdated={lastUpdated} />
         </div>
 
-        {/* Summary Cards */}
-        <ReportSummaryCards
-          counts={counts}
-          selectedType={selectedType}
-          onTypeSelect={handleTypeSelect}
-        />
+        {/* Summary Cards - Read-only, not clickable */}
+        <ReportSummaryCards counts={counts} />
 
         {/* Custom Reports Picker */}
         <CustomReportPicker
@@ -86,7 +143,7 @@ const UserReports = () => {
         {/* Main Content Tabs */}
         <Tabs value={selectedType} onValueChange={setSelectedType} className="space-y-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <TabsList className="glass-card">
+            <TabsList className="bg-muted/50 border border-border/50">
               <TabsTrigger value="all">All</TabsTrigger>
               <TabsTrigger value="daily">Daily</TabsTrigger>
               <TabsTrigger value="weekly">Weekly</TabsTrigger>
@@ -100,14 +157,14 @@ const UserReports = () => {
                 placeholder="Search reports..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 bg-surface/50 border-border/50 focus:border-primary"
+                className="pl-9 bg-background border-border/50 focus:border-primary"
               />
             </div>
           </div>
 
           {/* Error State */}
           {error && (
-            <div className="glass-card p-4 border-destructive/30 bg-destructive/5 rounded-lg">
+            <div className="p-4 border border-destructive/30 bg-destructive/5 rounded-lg">
               <p className="text-destructive text-sm">{error}</p>
             </div>
           )}
@@ -118,6 +175,7 @@ const UserReports = () => {
               reports={paginatedReports}
               loading={loading}
               onReportClick={handleReportClick}
+              onDownloadPdf={handleDownloadPdf}
             />
 
             {/* Pagination */}
@@ -132,7 +190,7 @@ const UserReports = () => {
         </Tabs>
 
         {/* AI Summary Card */}
-        <div className="glass-card p-6 rounded-xl border border-primary/20">
+        <div className="p-6 rounded-xl border border-primary/20 bg-primary/5">
           <div className="flex items-center gap-2 mb-4">
             <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
             <h3 className="font-semibold">AI Summary</h3>
@@ -140,13 +198,13 @@ const UserReports = () => {
           <div className="space-y-3 text-sm text-muted-foreground">
             <p>
               Total reports available:{" "}
-              <span className="text-primary font-medium">{counts.total}</span>
+              <span className="text-blue-400 font-medium">{counts.total}</span>
             </p>
             <p>
               Daily reports:{" "}
-              <span className="text-primary font-medium">{counts.daily}</span> | Weekly:{" "}
-              <span className="text-secondary font-medium">{counts.weekly}</span> | Monthly:{" "}
-              <span className="text-accent font-medium">{counts.monthly}</span>
+              <span className="text-emerald-400 font-medium">{counts.daily}</span> | Weekly:{" "}
+              <span className="text-amber-400 font-medium">{counts.weekly}</span> | Monthly:{" "}
+              <span className="text-purple-400 font-medium">{counts.monthly}</span>
             </p>
             {lastUpdated && (
               <p>

@@ -4,51 +4,57 @@ import { ReportCounts } from "@/hooks/useReports";
 
 interface ReportSummaryCardsProps {
   counts: ReportCounts;
-  selectedType: string;
-  onTypeSelect: (type: string) => void;
 }
 
-const ReportSummaryCards = ({ counts, selectedType, onTypeSelect }: ReportSummaryCardsProps) => {
+const ReportSummaryCards = ({ counts }: ReportSummaryCardsProps) => {
   const cards = [
     {
-      id: "all",
+      id: "total",
       label: "Total Reports",
       value: counts.total,
       icon: FileText,
-      color: "primary",
-      gradient: "from-primary/20 to-primary/5",
-      iconBg: "bg-primary/10",
-      iconColor: "text-primary",
+      // Zabbix-style: blue/info for totals
+      bgGradient: "from-blue-500/15 to-blue-500/5",
+      iconBg: "bg-blue-500/15",
+      iconColor: "text-blue-400",
+      borderColor: "border-blue-500/20",
+      valueColor: "text-blue-400",
     },
     {
       id: "daily",
       label: "Daily Reports",
       value: counts.daily,
       icon: Calendar,
-      color: "primary",
-      gradient: "from-primary/15 to-transparent",
-      iconBg: "bg-primary/10",
-      iconColor: "text-primary",
+      // Zabbix-style: green/success for daily
+      bgGradient: "from-emerald-500/15 to-emerald-500/5",
+      iconBg: "bg-emerald-500/15",
+      iconColor: "text-emerald-400",
+      borderColor: "border-emerald-500/20",
+      valueColor: "text-emerald-400",
     },
     {
       id: "weekly",
       label: "Weekly Reports",
       value: counts.weekly,
       icon: CalendarDays,
-      color: "secondary",
-      gradient: "from-secondary/15 to-transparent",
-      iconBg: "bg-secondary/10",
-      iconColor: "text-secondary",
+      // Zabbix-style: amber/warning for weekly
+      bgGradient: "from-amber-500/15 to-amber-500/5",
+      iconBg: "bg-amber-500/15",
+      iconColor: "text-amber-400",
+      borderColor: "border-amber-500/20",
+      valueColor: "text-amber-400",
     },
     {
       id: "monthly",
       label: "Monthly Reports",
       value: counts.monthly,
       icon: CalendarRange,
-      color: "accent",
-      gradient: "from-accent/15 to-transparent",
-      iconBg: "bg-accent/10",
-      iconColor: "text-accent",
+      // Zabbix-style: purple/accent for monthly
+      bgGradient: "from-purple-500/15 to-purple-500/5",
+      iconBg: "bg-purple-500/15",
+      iconColor: "text-purple-400",
+      borderColor: "border-purple-500/20",
+      valueColor: "text-purple-400",
     },
   ];
 
@@ -56,22 +62,23 @@ const ReportSummaryCards = ({ counts, selectedType, onTypeSelect }: ReportSummar
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
       {cards.map((card) => {
         const Icon = card.icon;
-        const isSelected = selectedType === card.id;
 
         return (
           <Card
             key={card.id}
-            onClick={() => onTypeSelect(card.id)}
             className={`
-              glass-card p-4 cursor-pointer transition-all duration-300 hover-lift
-              border-2 ${isSelected ? `border-${card.color} glow-${card.color}` : "border-transparent"}
-              bg-gradient-to-br ${card.gradient}
+              p-4 transition-colors duration-200
+              border ${card.borderColor}
+              bg-gradient-to-br ${card.bgGradient}
+              cursor-default select-none
             `}
           >
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm text-muted-foreground font-medium">{card.label}</p>
-                <p className="text-3xl font-bold mt-1 text-foreground">{card.value}</p>
+                <p className={`text-3xl font-bold mt-1 ${card.valueColor}`}>
+                  {card.value}
+                </p>
               </div>
               <div className={`p-2 rounded-lg ${card.iconBg}`}>
                 <Icon className={`w-5 h-5 ${card.iconColor}`} />
