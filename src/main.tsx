@@ -1,40 +1,32 @@
-import React from "react";
 import { createRoot } from "react-dom/client";
 import { ReactKeycloakProvider } from "@react-keycloak/web";
-import type { AuthClientEvent, AuthClientError } from "@react-keycloak/core";
-
-import App from "./App";
+import keycloak, { initOptions } from "./keycloak/config/keycloak";
+import AuthLoadingScreen from "./keycloak/components/AuthLoadingScreen";
+import App from "./App.tsx";
 import "./index.css";
-import "./styles/accessibility.css";
-import { logPerformanceMetrics } from "./utils/performance";
 
-import keycloak from "./auth/keycloak";
-
-const APP_ORIGIN = "http://localhost:8082";
-
-const initOptions = {
-  onLoad: "check-sso" as const,
-  pkceMethod: "S256" as const,
-  checkLoginIframe: true,
-  silentCheckSsoRedirectUri: `${APP_ORIGIN}/silent-check-sso.html`,
-  redirectUri: `${APP_ORIGIN}/dashboard`,
+const eventLogger = (event: string, error?: unknown) => {
+  if (import.meta.env.DEV) {
+    console.log('[Keycloak Event]:', event);
+    if (error) {
+      console.error('[Keycloak Error]:', error);
+    }
+  }
 };
 
-const onEvent = (event: AuthClientEvent, error?: AuthClientError) => {
-  if (error) console.error("[Keycloak Error]", event, error);
+const tokenLogger = (tokens: { token?: string }) => {
+  if (import.meta.env.DEV && tokens?.token) {
+    console.log('[Keycloak] Token refreshed');
+  }
 };
 
 createRoot(document.getElementById("root")!).render(
-  <ReactKeycloakProvider authClient={keycloak} initOptions={initOptions} onEvent={onEvent}>
+  <ReactKeycloakProvider
+    authClient={keycloak}
+    initOptions={initOptions}
+    onEvent={eventLogger}
+    onTokens={tokenLogger}
+  >
     <App />
-  </ReactKeycloakProvider>,
+  </ReactKeycloakProvider>
 );
-
-// Log performance metrics after app loads (development only)
-if (import.meta.env.DEV) {
-  window.addEventListener("load", () => {
-    setTimeout(() => {
-      logPerformanceMetrics();
-    }, 1000);
-  });
-}
