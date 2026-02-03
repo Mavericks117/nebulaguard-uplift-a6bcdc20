@@ -10,10 +10,9 @@ interface ReportsListProps {
   reports: ReportItem[];
   loading: boolean;
   onReportClick: (report: ReportItem) => void;
-  onDownloadPdf: (report: ReportItem) => void;
 }
 
-const ReportsList = ({ reports, loading, onReportClick, onDownloadPdf }: ReportsListProps) => {
+const ReportsList = ({ reports, loading, onReportClick }: ReportsListProps) => {
   const getTypeColor = (type: string) => {
     switch (type) {
       case "daily":
@@ -41,9 +40,101 @@ const ReportsList = ({ reports, loading, onReportClick, onDownloadPdf }: Reports
     }
   };
 
-  const handleDownloadClick = (e: React.MouseEvent, report: ReportItem) => {
+  const handleDownloadClick = async (e: React.MouseEvent, report: ReportItem) => {
     e.stopPropagation();
-    onDownloadPdf(report);
+    
+    // Generate PDF with color fidelity matching UI (dark theme)
+    const htmlContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Report - ${format(new Date(report.created_at), "PPP")}</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 1.2cm;
+    }
+    @media print {
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      font-size: 12px;
+      line-height: 1.6;
+      color: #e2e8f0;
+      background: #0f172a !important;
+    }
+    body { padding: 1.5rem; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.5rem 0;
+      background: #1e293b !important;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      page-break-inside: auto;
+    }
+    th, td {
+      border: 1px solid #334155;
+      padding: 0.5rem;
+      text-align: left;
+    }
+    th {
+      background: #334155 !important;
+      font-weight: 600;
+      color: #f1f5f9;
+    }
+    tr { page-break-inside: avoid; page-break-after: auto; }
+    img { max-width: 100%; height: auto; page-break-inside: avoid; border-radius: 0.5rem; }
+    h1, h2, h3, h4, h5, h6 {
+      color: #f1f5f9;
+      page-break-after: avoid;
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+    h1 { font-size: 1.5rem; }
+    h2 { font-size: 1.25rem; }
+    h3 { font-size: 1.1rem; }
+    p { margin-bottom: 1rem; }
+    ul, ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+    li { margin-bottom: 0.25rem; }
+    a { color: #60a5fa; text-decoration: none; }
+    pre, code {
+      background: #1e293b !important;
+      border-radius: 0.25rem;
+      padding: 0.25rem 0.5rem;
+      font-family: 'Monaco', 'Menlo', monospace;
+      font-size: 0.875rem;
+    }
+    pre { padding: 1rem; overflow-x: auto; }
+    blockquote {
+      border-left: 4px solid #3b82f6;
+      margin: 1rem 0;
+      padding-left: 1rem;
+      color: #94a3b8;
+    }
+    hr { border: none; border-top: 1px solid #334155; margin: 1.5rem 0; }
+    .success, .ok, .green { color: #22c55e !important; }
+    .warning, .yellow { color: #eab308 !important; }
+    .error, .critical, .red { color: #ef4444 !important; }
+  </style>
+</head>
+<body>${report.report_template}</body>
+</html>`;
+
+    // Create blob and trigger instant download
+    const blob = new Blob([htmlContent], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `report-${report.report_type}-${format(new Date(report.created_at), "yyyy-MM-dd")}.html`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   const handleViewClick = (e: React.MouseEvent, report: ReportItem) => {
