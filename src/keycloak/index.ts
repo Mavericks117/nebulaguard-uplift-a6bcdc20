@@ -15,8 +15,11 @@ export { default as UserInfoMenu } from './components/UserInfoMenu';
 
 // Hooks
 export { useAuthenticatedFetch } from './hooks/useAuthenticatedFetch';
+export { useIdleTimeout } from './hooks/useIdleTimeout';
+export { useTokenRefresh } from './hooks/useTokenRefresh';
 
 // Utils - Token
+
 export {
   decodeToken,
   extractRoles,
