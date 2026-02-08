@@ -13,7 +13,7 @@ const ENDPOINTS = {
   hosts: "http://localhost:5678/webhook/zabbix-hosts", 
   reports: "http://localhost:5678/webhook/reports",
   insights: "http://localhost:5678/webhook/agent-insights",
-  veeam: "http://10.100.12.141:5678/webhook/backupandreplication",
+  veeam: "http://localhost:5678/webhook/backupandreplication",
 };
 
 const REFRESH_INTERVAL = 60000; // 1 minute for detail view
@@ -96,9 +96,9 @@ export const useOrganizationMetrics = (
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ client_id: clientId }),
         }),
-        // Veeam (GET endpoint)
+        // Veeam (POST endpoint)
         authenticatedFetch(ENDPOINTS.veeam, {
-          method: "GET",
+          method: "POST",
           headers: { "Content-Type": "application/json" },
         }),
       ]);
