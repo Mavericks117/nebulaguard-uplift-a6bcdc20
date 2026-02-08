@@ -20,6 +20,7 @@ interface ReportsDrilldownProps {
   loading: boolean;
   error: string | null;
   onRefresh: () => void;
+  onItemClick?: (item: ReportItem) => void;
 }
 
 type ReportFilter = "all" | "daily" | "weekly" | "monthly";
@@ -32,7 +33,7 @@ const typeColors: Record<string, string> = {
 
 const PAGE_SIZE = 8;
 
-const ReportsDrilldown = ({ orgName, reports, loading, error, onRefresh }: ReportsDrilldownProps) => {
+const ReportsDrilldown = ({ orgName, reports, loading, error, onRefresh, onItemClick }: ReportsDrilldownProps) => {
   const [filter, setFilter] = useState<ReportFilter>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
@@ -164,6 +165,11 @@ const ReportsDrilldown = ({ orgName, reports, loading, error, onRefresh }: Repor
               <Card
                 key={report.id}
                 className="p-4 border-border/50 hover:border-primary/30 transition-colors cursor-pointer"
+                onClick={() => onItemClick?.(report)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === "Enter" && onItemClick?.(report)}
+                aria-label={`View details for report: ${report.name}`}
               >
                 <div className="flex items-center gap-4">
                   <div className="p-2.5 rounded-lg bg-secondary/10 border border-secondary/20">

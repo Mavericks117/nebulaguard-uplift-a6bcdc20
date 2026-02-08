@@ -30,6 +30,7 @@ interface InsightsDrilldownProps {
   loading: boolean;
   error: string | null;
   onRefresh: () => void;
+  onItemClick?: (item: InsightItem) => void;
 }
 
 type InsightFilter = "all" | "predictions" | "anomalies" | "recommendations";
@@ -54,6 +55,7 @@ const InsightsDrilldown = ({
   loading,
   error,
   onRefresh,
+  onItemClick,
 }: InsightsDrilldownProps) => {
   const [filter, setFilter] = useState<InsightFilter>("all");
   const [searchQuery, setSearchQuery] = useState("");
@@ -230,6 +232,11 @@ const InsightsDrilldown = ({
                 <Card
                   key={insight.id}
                   className="p-4 border-border/50 hover:border-primary/30 transition-colors cursor-pointer"
+                  onClick={() => onItemClick?.(insight)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => e.key === "Enter" && onItemClick?.(insight)}
+                  aria-label={`View details for insight: ${insight.title}`}
                 >
                   <div className="space-y-2">
                     <div className="flex items-start justify-between gap-4">
