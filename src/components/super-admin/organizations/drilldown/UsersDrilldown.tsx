@@ -20,6 +20,7 @@ interface UsersDrilldownProps {
   loading: boolean;
   error: string | null;
   onRefresh: () => void;
+  onItemClick?: (item: UserItem) => void;
 }
 
 type UserFilter = "all" | "active" | "inactive";
@@ -30,7 +31,7 @@ const roleColors: Record<string, string> = {
   viewer: "border-muted/30 bg-muted/10 text-muted-foreground",
 };
 
-const UsersDrilldown = ({ orgName, users, loading, error, onRefresh }: UsersDrilldownProps) => {
+const UsersDrilldown = ({ orgName, users, loading, error, onRefresh, onItemClick }: UsersDrilldownProps) => {
   const [filter, setFilter] = useState<UserFilter>("all");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -153,6 +154,11 @@ const UsersDrilldown = ({ orgName, users, loading, error, onRefresh }: UsersDril
               <Card 
                 key={user.id} 
                 className="p-4 border-border/50 hover:border-primary/30 transition-colors cursor-pointer"
+                onClick={() => onItemClick?.(user)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === "Enter" && onItemClick?.(user)}
+                aria-label={`View details for user: ${user.name}`}
               >
                 <div className="flex items-center gap-4">
                   <div className={`

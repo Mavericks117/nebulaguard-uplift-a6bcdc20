@@ -2,6 +2,7 @@
  * Organization Detail View
  * Shows detailed metrics for a selected organization with clickable drilldown cards
  */
+import { useState, useCallback } from "react";
 import { 
   X, 
   Users, 
@@ -28,7 +29,13 @@ import {
 import { Organization, OrganizationDetailMetrics } from "@/hooks/super-admin/organizations";
 import { 
   useOrganizationDetails, 
-  DrilldownCategory 
+  DrilldownCategory,
+  AlertItem,
+  HostItem,
+  ReportItem,
+  InsightItem,
+  VeeamJobItem,
+  UserItem,
 } from "@/hooks/super-admin/organizations/useOrganizationDetails";
 import {
   AlertsDrilldown,
@@ -38,6 +45,7 @@ import {
   VeeamDrilldown,
   UsersDrilldown,
 } from "./drilldown";
+import { DrilldownDetailDrawer } from "./drilldown/detail";
 import { format } from "date-fns";
 
 interface OrganizationDetailViewProps {
@@ -126,12 +134,20 @@ const OrganizationDetailView = ({
     enabled: true,
   });
 
+  // Selected item for drawer detail view
+  type DrilldownItem = AlertItem | HostItem | ReportItem | InsightItem | VeeamJobItem | UserItem;
+  const [selectedItem, setSelectedItem] = useState<DrilldownItem | null>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
   const handleCardClick = (category: DrilldownCategory) => {
     if (selectedCategory === category) {
       setSelectedCategory(null); // Toggle off
     } else {
       setSelectedCategory(category);
     }
+    // Close drawer when switching categories
+    setSelectedItem(null);
+    setDrawerOpen(false);
   };
 
   const handleRefreshCategory = () => {
@@ -139,6 +155,16 @@ const OrganizationDetailView = ({
       refreshCategory(selectedCategory);
     }
   };
+
+  const handleItemClick = useCallback((item: DrilldownItem) => {
+    setSelectedItem(item);
+    setDrawerOpen(true);
+  }, []);
+
+  const handleDrawerClose = useCallback(() => {
+    setDrawerOpen(false);
+    setSelectedItem(null);
+  }, []);
 
   // Render the drilldown content based on selected category
   const renderDrilldown = () => {
@@ -153,6 +179,7 @@ const OrganizationDetailView = ({
             loading={alerts.loading}
             error={alerts.error}
             onRefresh={handleRefreshCategory}
+            onItemClick={handleItemClick}
           />
         );
       case "hosts":
@@ -163,6 +190,7 @@ const OrganizationDetailView = ({
             loading={hosts.loading}
             error={hosts.error}
             onRefresh={handleRefreshCategory}
+            onItemClick={handleItemClick}
           />
         );
       case "reports":
@@ -173,6 +201,7 @@ const OrganizationDetailView = ({
             loading={reports.loading}
             error={reports.error}
             onRefresh={handleRefreshCategory}
+            onItemClick={handleItemClick}
           />
         );
       case "insights":
@@ -183,6 +212,7 @@ const OrganizationDetailView = ({
             loading={insights.loading}
             error={insights.error}
             onRefresh={handleRefreshCategory}
+            onItemClick={handleItemClick}
           />
         );
       case "veeam":
@@ -193,6 +223,7 @@ const OrganizationDetailView = ({
             loading={veeam.loading}
             error={veeam.error}
             onRefresh={handleRefreshCategory}
+            onItemClick={handleItemClick}
           />
         );
       case "users":
@@ -203,6 +234,7 @@ const OrganizationDetailView = ({
             loading={users.loading}
             error={users.error}
             onRefresh={handleRefreshCategory}
+            onItemClick={handleItemClick}
           />
         );
       default:
@@ -415,6 +447,15 @@ const OrganizationDetailView = ({
           </div>
         </div>
       </Card>
+
+      {/* Item Detail Drawer */}
+      <DrilldownDetailDrawer
+        open={drawerOpen}
+        onClose={handleDrawerClose}
+        category={selectedCategory}
+        item={selectedItem}
+        orgName={organization.name}
+      />
     </div>
   );
 };

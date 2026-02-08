@@ -20,13 +20,14 @@ interface HostsDrilldownProps {
   loading: boolean;
   error: string | null;
   onRefresh: () => void;
+  onItemClick?: (item: HostItem) => void;
 }
 
 type HostFilter = "all" | "enabled" | "disabled";
 
 const PAGE_SIZE = 8;
 
-const HostsDrilldown = ({ orgName, hosts, loading, error, onRefresh }: HostsDrilldownProps) => {
+const HostsDrilldown = ({ orgName, hosts, loading, error, onRefresh, onItemClick }: HostsDrilldownProps) => {
   const [filter, setFilter] = useState<HostFilter>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -170,6 +171,11 @@ const HostsDrilldown = ({ orgName, hosts, loading, error, onRefresh }: HostsDril
               <Card
                 key={host.hostid}
                 className="p-4 border-border/50 hover:border-primary/30 transition-colors cursor-pointer"
+                onClick={() => onItemClick?.(host)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === "Enter" && onItemClick?.(host)}
+                aria-label={`View details for host: ${host.name}`}
               >
                 <div className="flex items-center gap-4">
                   <div

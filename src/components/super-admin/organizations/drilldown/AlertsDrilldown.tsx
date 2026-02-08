@@ -21,6 +21,7 @@ interface AlertsDrilldownProps {
   loading: boolean;
   error: string | null;
   onRefresh: () => void;
+  onItemClick?: (item: AlertItem) => void;
 }
 
 type AlertFilter = "all" | "active" | "critical" | "acknowledged";
@@ -37,7 +38,7 @@ const severityColors: Record<string, string> = {
   information: "bg-primary/20 text-primary border-primary/30",
 };
 
-const AlertsDrilldown = ({ orgName, alerts, loading, error, onRefresh }: AlertsDrilldownProps) => {
+const AlertsDrilldown = ({ orgName, alerts, loading, error, onRefresh, onItemClick }: AlertsDrilldownProps) => {
   const [filter, setFilter] = useState<AlertFilter>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -186,6 +187,11 @@ const AlertsDrilldown = ({ orgName, alerts, loading, error, onRefresh }: AlertsD
               <Card
                 key={alert.id}
                 className="p-4 border-border/50 hover:border-primary/30 transition-colors cursor-pointer"
+                onClick={() => onItemClick?.(alert)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === "Enter" && onItemClick?.(alert)}
+                aria-label={`View details for alert: ${alert.title}`}
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 min-w-0">

@@ -20,6 +20,7 @@ interface VeeamDrilldownProps {
   loading: boolean;
   error: string | null;
   onRefresh: () => void;
+  onItemClick?: (item: VeeamJobItem) => void;
 }
 
 type VeeamFilter = "all" | "success" | "failed" | "warning";
@@ -46,7 +47,7 @@ const statusIcons: Record<string, React.ElementType> = {
   unknown: Clock,
 };
 
-const VeeamDrilldown = ({ orgName, jobs, loading, error, onRefresh }: VeeamDrilldownProps) => {
+const VeeamDrilldown = ({ orgName, jobs, loading, error, onRefresh, onItemClick }: VeeamDrilldownProps) => {
   const [filter, setFilter] = useState<VeeamFilter>("all");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -176,6 +177,11 @@ const VeeamDrilldown = ({ orgName, jobs, loading, error, onRefresh }: VeeamDrill
                 <Card 
                   key={job.id} 
                   className="p-4 border-border/50 hover:border-primary/30 transition-colors cursor-pointer"
+                  onClick={() => onItemClick?.(job)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => e.key === "Enter" && onItemClick?.(job)}
+                  aria-label={`View details for job: ${job.name}`}
                 >
                   <div className="flex items-center gap-4">
                     <div className={`p-2.5 rounded-lg ${statusColors[status]}`}>
