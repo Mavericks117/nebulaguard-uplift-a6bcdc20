@@ -1,4 +1,0 @@
-project_id = "sctuwchgdhdfuzygpajk"
-
-[functions.update-profile]
-verify_jwt = false

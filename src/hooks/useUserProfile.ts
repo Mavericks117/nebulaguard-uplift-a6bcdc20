@@ -114,41 +114,43 @@ export function useUserProfile() {
   }, []);
 
   const updateProfile = useCallback(
-    async (updates: { given_name: string; family_name: string }) => {
-      if (!keycloak.token) {
-        throw new Error('Not authenticated');
+  async (updates: { given_name: string; family_name: string }) => {
+    if (!keycloak.token) {
+      throw new Error('Not authenticated');
+    }
+
+    setIsSaving(true);
+
+    try {
+      const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
+      const response = await fetch(`${backendUrl}/update-profile`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${keycloak.token}`,
+        },
+        body: JSON.stringify(updates),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Update failed (${response.status})`);
       }
 
-      setIsSaving(true);
+      // Re-fetch profile to get official state
+      await fetchProfile();
+      return true;
+    } catch (err: any) {
+      console.error('[useUserProfile] Update error:', err);
+      throw err;
+    } finally {
+      setIsSaving(false);
+    }
+  },
+  [fetchProfile]
+);
 
-      try {
-        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-        const response = await fetch(`${supabaseUrl}/functions/v1/update-profile`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${keycloak.token}`,
-          },
-          body: JSON.stringify(updates),
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({}));
-          throw new Error(errorData.error || `Update failed (${response.status})`);
-        }
-
-        // Re-fetch profile to get official state
-        await fetchProfile();
-        return true;
-      } catch (err: any) {
-        console.error('[useUserProfile] Update error:', err);
-        throw err;
-      } finally {
-        setIsSaving(false);
-      }
-    },
-    [fetchProfile]
-  );
 
   useEffect(() => {
     if (isAuthenticated && keycloak.token && !fetchedRef.current) {

@@ -1,4 +1,4 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { decode as decodeJwt } from "https://deno.land/x/djwt@v3.0.2/mod.ts";
 
 const corsHeaders = {
@@ -78,7 +78,7 @@ serve(async (req) => {
 
     // ── Get Keycloak admin credentials from secrets ──
     const keycloakBaseUrl = Deno.env.get("KEYCLOAK_BASE_URL");
-    const keycloakRealm = Deno.env.get("KEYCLOAK_REALM") || "Jarvis";
+    const keycloakRealm = Deno.env.get("KEYCLOAK_REALM") ?? "Jarvis";
     const adminClientId = Deno.env.get("KEYCLOAK_ADMIN_CLIENT_ID");
     const adminClientSecret = Deno.env.get("KEYCLOAK_ADMIN_CLIENT_SECRET");
 
@@ -155,4 +155,4 @@ serve(async (req) => {
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
-});
+}), { port: 8081 };
