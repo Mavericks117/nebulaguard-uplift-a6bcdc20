@@ -5,14 +5,21 @@
  */
 import { useState, useCallback, useRef, useEffect } from "react";
 import { useAuthenticatedFetch } from "@/keycloak/hooks/useAuthenticatedFetch";
+import {
+  WEBHOOK_ALERTS_URL,
+  WEBHOOK_ZABBIX_HOSTS_URL,
+  WEBHOOK_REPORTS_URL,
+  WEBHOOK_AI_INSIGHTS_URL,
+  WEBHOOK_BACKUP_REPLICATION_URL,
+} from "@/config/env";
 
 // Reuse existing endpoint patterns
 const ENDPOINTS = {
-  alerts: "http://localhost:5678/webhook/ai/insights",
-  hosts: "http://localhost:5678/webhook/zabbix-hosts",
-  reports: "http://localhost:5678/webhook/reports",
-  insights: "http://localhost:5678/webhook/agent-insights",
-  veeam: "http://localhost:5678/webhook/backupandreplication",
+  alerts: WEBHOOK_ALERTS_URL,
+  hosts: WEBHOOK_ZABBIX_HOSTS_URL,
+  reports: WEBHOOK_REPORTS_URL,
+  insights: WEBHOOK_AI_INSIGHTS_URL,
+  veeam: WEBHOOK_BACKUP_REPLICATION_URL,
 };
 
 export type DrilldownCategory =
