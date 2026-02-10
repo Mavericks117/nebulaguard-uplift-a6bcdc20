@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import keycloak from '@/keycloak/config/keycloak';
 import { useAuth } from '@/keycloak/context/AuthContext';
+import { KEYCLOAK_USERINFO_URL, BACKEND_URL } from '@/config/env';
 
 // ─── Keycloak userinfo response shape ───
 interface KeycloakUserInfo {
@@ -89,9 +90,7 @@ export function useUserProfile() {
     setError(null);
 
     try {
-      const keycloakUrl = import.meta.env.VITE_KEYCLOAK_URL || 'http://localhost:8080';
-      const realm = import.meta.env.VITE_KEYCLOAK_REALM || 'Jarvis';
-      const url = `${keycloakUrl.replace(/\/$/, '')}/realms/${realm}/protocol/openid-connect/userinfo`;
+      const url = KEYCLOAK_USERINFO_URL;
 
       const response = await fetch(url, {
         headers: {
@@ -122,9 +121,7 @@ export function useUserProfile() {
     setIsSaving(true);
 
     try {
-      const backendUrl = import.meta.env.VITE_BACKEND_URL;
-
-      const response = await fetch(`${backendUrl}/update-profile`, {
+      const response = await fetch(`${BACKEND_URL}/update-profile`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
