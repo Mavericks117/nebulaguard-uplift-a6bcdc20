@@ -156,6 +156,7 @@ const transformWebhookAlert = (webhook: WebhookAlert): Alert => {
     // Extended fields for drawer / details
     aiInsights: webhook.first_ai_response,
     timesSent: webhook.times_sent,
+    seenCount: webhook.seen_count,
     firstSeen: webhook.first_seen,
     lastSeen: webhook.last_seen_at,
     dedupeKey,
