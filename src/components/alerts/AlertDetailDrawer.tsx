@@ -323,9 +323,14 @@ const AlertDetailDrawer = ({
                           View Raw AI Response
                         </AccordionTrigger>
                         <AccordionContent>
-                          <pre className="p-3 bg-muted/50 rounded-lg text-xs overflow-auto max-h-48">
-                            {alert.aiInsights}
-                          </pre>
+                          <div className="p-4 bg-muted/30 rounded-lg border border-border/50">
+                            <div
+                              className="prose prose-sm dark:prose-invert max-w-none text-sm leading-relaxed [&_b]:font-bold [&_strong]:font-bold [&_a]:text-primary [&_a]:underline [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:my-0.5"
+                              dangerouslySetInnerHTML={{
+                                __html: sanitizedInsights,
+                              }}
+                            />
+                          </div>
                         </AccordionContent>
                       </AccordionItem>
                     </Accordion>

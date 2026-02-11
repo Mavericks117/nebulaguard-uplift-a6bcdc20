@@ -73,6 +73,8 @@ const Alerts = () => {
           onSeverityChange={setSelectedSeverities}
           showAcknowledged={showAcknowledged}
           onShowAcknowledgedChange={setShowAcknowledged}
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
         />
 
         {/* Alerts Table with live data */}
