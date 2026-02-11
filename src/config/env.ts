@@ -52,3 +52,14 @@ export const WEBHOOK_JARVIS_ASSISTANT_URL =
 
 export const WEBHOOK_ORGANIZATIONS_URL =
   import.meta.env.VITE_WEBHOOK_ORGANIZATIONS_URL || `${WEBHOOK_BASE_URL}/webhook/organizations`;
+
+// ─── System Logs (Keycloak Audit Events) ────────────────────────────────────
+/** User events (LOGIN, UPDATE_PROFILE, LOGIN_ERROR, etc.) */
+export const KEYCLOAK_EVENTS_URL =
+  import.meta.env.VITE_KEYCLOAK_EVENTS_URL ||
+  `${KEYCLOAK_URL.replace(/\/$/, '')}/admin/realms/${KEYCLOAK_REALM}/events`;
+
+/** Admin events (user create/update/delete, role changes, realm config, etc.) */
+export const KEYCLOAK_ADMIN_EVENTS_URL =
+  import.meta.env.VITE_KEYCLOAK_ADMIN_EVENTS_URL ||
+  `${KEYCLOAK_URL.replace(/\/$/, '')}/admin/realms/${KEYCLOAK_REALM}/admin-events`;
